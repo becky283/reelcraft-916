@@ -7,23 +7,19 @@ import { getFontFamily } from './fonts';
 function calculateAdaptiveFontSize(text, baseSize = 64, minSize = 34, maxWidth = 880, maxHeight = 480) {
   if (!text) return baseSize;
   
-  const charCount = text.length;
-  const words = text.trim().split(/\s+/);
+  // Strip formatting brackets if any for length calculation
+  const cleanText = text.replace(/[*[\]]/g, '');
+  const charCount = cleanText.length;
+  const words = cleanText.trim().split(/\s+/);
   const longestWordLength = Math.max(...words.map(w => w.length), 0);
 
-  // If a single word is extremely long, reduce font size to prevent overflow
   let size = baseSize;
   
-  // Approximate width per character for bold uppercase font is ~0.6 * fontSize
   const estWordWidth = longestWordLength * (size * 0.62);
   if (estWordWidth > maxWidth) {
     size = Math.floor(maxWidth / (longestWordLength * 0.62));
   }
 
-  // Approximate total area needed
-  // Total characters * char_width * line_height
-  // lines approx = (charCount * size * 0.6) / maxWidth
-  // totalHeight approx = lines * (size * 1.25)
   const approxLines = Math.max(1, Math.ceil((charCount * (size * 0.62)) / maxWidth));
   const approxHeight = approxLines * (size * 1.3);
 
@@ -32,35 +28,66 @@ function calculateAdaptiveFontSize(text, baseSize = 64, minSize = 34, maxWidth =
     size = Math.floor(size * scaleFactor);
   }
 
-  // Clamp within bounds
   return Math.max(minSize, Math.min(baseSize, size));
 }
 
 /**
- * Splits text by highlight queries and marks matching segments
+ * Splits text by multi-term highlight queries or brackets (*phrase* / [phrase])
  */
-export function parseHighlightedText(text, highlightQuery) {
+export function parseHighlightedText(text, highlightInput) {
   if (!text) return [];
-  if (!highlightQuery || !highlightQuery.trim()) {
+
+  // 1. Check for markdown asterisks *text* or brackets [text]
+  if (/\*([^*]+)\*/.test(text) || /\[([^\]]+)\]/.test(text)) {
+    const tokens = [];
+    const regex = /(\*([^*]+)\*|\[([^\]]+)\])/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        tokens.push({ text: text.slice(lastIndex, match.index), isHighlight: false });
+      }
+      tokens.push({ text: match[2] || match[3], isHighlight: true });
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      tokens.push({ text: text.slice(lastIndex), isHighlight: false });
+    }
+    return tokens.filter(t => t.text.length > 0);
+  }
+
+  // 2. Parse multi-phrase list (from array, or comma-separated string)
+  let terms = [];
+  if (Array.isArray(highlightInput)) {
+    terms = highlightInput.map(s => String(s).trim()).filter(Boolean);
+  } else if (typeof highlightInput === 'string' && highlightInput.trim()) {
+    terms = highlightInput.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+  }
+
+  if (terms.length === 0) {
     return [{ text, isHighlight: false }];
   }
 
-  const query = highlightQuery.trim();
-  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(`(${escapedQuery})`, 'gi');
-  const parts = text.split(regex);
+  // Sort longest terms first so multi-word phrases match before single words
+  terms.sort((a, b) => b.length - a.length);
 
+  const escapedTerms = terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const combinedRegex = new RegExp(`(${escapedTerms.join('|')})`, 'gi');
+
+  const parts = text.split(combinedRegex);
   return parts
-    .filter(part => part.length > 0)
-    .map(part => ({
-      text: part,
-      isHighlight: part.toLowerCase() === query.toLowerCase()
-    }));
+    .filter(p => p.length > 0)
+    .map(p => {
+      const lowerP = p.toLowerCase();
+      const isMatch = terms.some(t => t.toLowerCase() === lowerP);
+      return { text: p, isHighlight: isMatch };
+    });
 }
 
 export const CaptionLayer = ({
   caption = '',
   highlightText = '',
+  highlightWords = [],
   font = 'Montserrat ExtraBold',
   fontSize = 64,
   minFontSize = 34,
@@ -68,7 +95,7 @@ export const CaptionLayer = ({
   highlightColor = '#FFD600',
   align = 'center',
   textShadow = '0px 4px 16px rgba(0,0,0,0.95), 0px 2px 6px rgba(0,0,0,0.9)',
-  textStroke = 'none', // e.g. '2px #000000'
+  textStroke = 'none',
   x = 100,
   y = 1120,
   width = 880,
@@ -77,8 +104,23 @@ export const CaptionLayer = ({
   uppercase = true
 }) => {
   const displayText = uppercase ? caption.toUpperCase() : caption;
-  const displayHighlight = uppercase ? highlightText.toUpperCase() : highlightText;
   
+  // Combine highlightWords array and highlightText string
+  let terms = [];
+  if (Array.isArray(highlightWords) && highlightWords.length > 0) {
+    terms = [...highlightWords];
+  }
+  if (highlightText) {
+    const extra = typeof highlightText === 'string' 
+      ? highlightText.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean)
+      : (Array.isArray(highlightText) ? highlightText : [highlightText]);
+    terms = [...terms, ...extra];
+  }
+
+  if (uppercase) {
+    terms = terms.map(t => t.toUpperCase());
+  }
+
   const calculatedFontSize = calculateAdaptiveFontSize(
     displayText,
     fontSize,
@@ -87,7 +129,7 @@ export const CaptionLayer = ({
     maxHeight
   );
 
-  const segments = parseHighlightedText(displayText, displayHighlight);
+  const segments = parseHighlightedText(displayText, terms);
   const fontFamily = getFontFamily(font);
 
   return (

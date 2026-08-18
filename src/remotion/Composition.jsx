@@ -111,6 +111,7 @@ export const MainComposition = (props) => {
       <CaptionLayer
         caption={captionText}
         highlightText={highlightText}
+        highlightWords={props.highlightWords || []}
         font={font}
         fontSize={fontSize}
         minFontSize={minFontSize}

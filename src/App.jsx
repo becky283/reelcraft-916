@@ -12,7 +12,7 @@ import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film, ChevronDown, ChevronUp, Sliders } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v5';
+const STORAGE_KEY = 'auto_editor_user_settings_v6';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -28,7 +28,7 @@ export function App() {
   // Template State
   const [templates, setTemplates] = useState([]);
   const [activeTemplateId, setActiveTemplateId] = useState(saved.activeTemplateId || 'main-template');
-  const [isSimpleMode, setIsSimpleMode] = useState(saved.isSimpleMode ?? true); // Default to Simple Mode for clean workflow!
+  const [isSimpleMode, setIsSimpleMode] = useState(saved.isSimpleMode ?? true);
 
   // Core State
   const [videoSrc, setVideoSrc] = useState(saved.videoSrc || '/uploads/sample-landscape.mp4');
@@ -58,7 +58,8 @@ export function App() {
 
   // Caption State
   const [caption, setCaption] = useState(saved.caption ?? 'JIM CRAMER: BITCOIN TIDAK BAIK-BAIK SAJA SEGERA JUAL!');
-  const [highlightText, setHighlightText] = useState(saved.highlightText ?? 'JIM CRAMER:');
+  const [highlightWords, setHighlightWords] = useState(saved.highlightWords || ['JIM', 'CRAMER:']);
+  const [highlightText, setHighlightText] = useState(saved.highlightText ?? '');
   const [defaultColor, setDefaultColor] = useState(saved.defaultColor || '#FFFFFF');
   const [highlightColor, setHighlightColor] = useState(saved.highlightColor || '#FFD600');
   const [uppercase, setUppercase] = useState(saved.uppercase ?? true);
@@ -102,6 +103,8 @@ export function App() {
         align,
         defaultColor,
         highlightColor,
+        highlightWords,
+        highlightText,
         uppercase,
         textStroke,
         captionY,
@@ -124,12 +127,11 @@ export function App() {
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
     } catch (e) {}
-  }, [activeTemplateId, isSimpleMode, font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, twibbonSrc, logoEnabled, logoSrc, logoWidth, logoY]);
+  }, [activeTemplateId, isSimpleMode, font, fontSize, align, defaultColor, highlightColor, highlightWords, highlightText, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, twibbonSrc, logoEnabled, logoSrc, logoWidth, logoY]);
 
   // Fetch initial backend data (templates, samples, outputs)
   const refreshData = useCallback(async () => {
     try {
-      // 1. Templates
       const tmplRes = await fetch('/api/templates');
       if (tmplRes.ok) {
         const data = await tmplRes.json();
@@ -138,7 +140,6 @@ export function App() {
         }
       }
 
-      // 2. Samples
       const sampleRes = await fetch('/api/samples');
       if (sampleRes.ok) {
         const data = await sampleRes.json();
@@ -151,7 +152,6 @@ export function App() {
         }
       }
 
-      // 3. Outputs count
       const outRes = await fetch('/api/outputs');
       if (outRes.ok) {
         const data = await outRes.json();
@@ -396,7 +396,7 @@ export function App() {
         hasAudio: data.hasAudio,
       });
 
-      // Auto-adjust if video is landscape and in simple mode
+      // Auto-adjust if portrait
       if (data.height > data.width) {
         setVideoY(0);
         setVideoHeight(1920);
@@ -481,6 +481,7 @@ export function App() {
         gradientColor,
         gradientOpacity,
         caption,
+        highlightWords,
         highlightText,
         font,
         fontSize,
@@ -581,6 +582,8 @@ export function App() {
       setAlign('center');
       setDefaultColor('#FFFFFF');
       setHighlightColor('#FFD600');
+      setHighlightWords(['JIM', 'CRAMER:']);
+      setHighlightText('');
       setUppercase(true);
       setTextStroke('none');
       setCaptionY(1120);
@@ -636,12 +639,14 @@ export function App() {
             isUploading={isUploading}
           />
 
-          {/* 3. Caption Editor (Always Visible) */}
+          {/* 3. Caption Editor with Click-to-Highlight (Always Visible) */}
           <CaptionEditor
             caption={caption}
             onChangeCaption={setCaption}
+            highlightWords={highlightWords}
+            onChangeHighlightWords={setHighlightWords}
             highlightText={highlightText}
-            onChangeHighlight={setHighlightText}
+            onChangeHighlightText={setHighlightText}
             defaultColor={defaultColor}
             onChangeDefaultColor={setDefaultColor}
             highlightColor={highlightColor}
@@ -766,6 +771,7 @@ export function App() {
             gradientColor={gradientColor}
             gradientOpacity={gradientOpacity}
             caption={caption}
+            highlightWords={highlightWords}
             highlightText={highlightText}
             font={font}
             fontSize={fontSize}
