@@ -7,13 +7,18 @@ export function resolveMediaSrc(src) {
     src.startsWith('http://') ||
     src.startsWith('https://') ||
     src.startsWith('blob:') ||
-    src.startsWith('data:') ||
-    src.startsWith('/')
+    src.startsWith('data:')
   ) {
     return src;
   }
-  // Convert relative path to root-relative path for Vite proxy and Express
-  return `/${src}`;
+  
+  // Point directly to Express backend port 3001 for high-performance direct byte streaming
+  const clean = src.startsWith('/') ? src : `/${src}`;
+  if (typeof window !== 'undefined' && window.location) {
+    const host = window.location.hostname || '127.0.0.1';
+    return `http://${host}:3001${clean}`;
+  }
+  return `http://127.0.0.1:3001${clean}`;
 }
 
 export const VideoLayer = ({
@@ -27,8 +32,6 @@ export const VideoLayer = ({
   verticalAlign = 'center', // 'top' | 'center' | 'bottom'
   muted = false,
   volume = 1.0,
-  backdropBlur = false,
-  backdropOpacity = 0.7,
 }) => {
   const resolvedSrc = resolveMediaSrc(src);
 
@@ -41,14 +44,14 @@ export const VideoLayer = ({
           top: `${y}px`,
           width: `${width}px`,
           height: `${height}px`,
-          backgroundColor: '#1a1a1a',
+          backgroundColor: '#111827',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          color: '#888',
+          color: '#6b7280',
           fontSize: '28px',
           fontFamily: 'sans-serif',
-          border: '2px dashed #444',
+          border: '2px dashed #374151',
           boxSizing: 'border-box',
           zIndex: 10,
         }}
@@ -64,63 +67,30 @@ export const VideoLayer = ({
   if (verticalAlign === 'bottom') objectPosition = 'center bottom';
 
   return (
-    <>
-      {/* 1. Optional Blurred Video Backdrop to eliminate blank space */}
-      {backdropBlur && (
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: '1080px',
-            height: '1920px',
-            overflow: 'hidden',
-            zIndex: 5,
-            opacity: backdropOpacity,
-            filter: 'blur(40px) brightness(0.55)',
-            transform: 'scale(1.2)',
-            pointerEvents: 'none',
-          }}
-        >
-          <Video
-            src={resolvedSrc}
-            volume={0}
-            muted
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-          />
-        </div>
-      )}
-
-      {/* 2. Main Foreground Video Layer */}
-      <div
+    <div
+      style={{
+        position: 'absolute',
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        overflow: 'hidden',
+        backgroundColor: '#000000',
+        zIndex: 10,
+      }}
+    >
+      <Video
+        src={resolvedSrc}
+        volume={muted ? 0 : volume}
         style={{
-          position: 'absolute',
-          left: `${x}px`,
-          top: `${y}px`,
-          width: `${width}px`,
-          height: `${height}px`,
-          overflow: 'hidden',
-          backgroundColor: backdropBlur ? 'transparent' : '#000000',
-          zIndex: 10,
+          width: '100%',
+          height: '100%',
+          objectFit: fit,
+          objectPosition: objectPosition,
+          transform: scale !== 1.0 ? `scale(${scale})` : undefined,
+          transformOrigin: 'center center',
         }}
-      >
-        <Video
-          src={resolvedSrc}
-          volume={muted ? 0 : volume}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: fit,
-            objectPosition: objectPosition,
-            transform: scale !== 1.0 ? `scale(${scale})` : undefined,
-            transformOrigin: 'center center',
-          }}
-        />
-      </div>
-    </>
+      />
+    </div>
   );
 };

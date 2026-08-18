@@ -34,12 +34,22 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Serve static directories
-app.use('/uploads', express.static(uploadsDir));
-app.use('/assets', express.static(assetsDir));
-app.use('/fonts', express.static(fontsDir));
-app.use('/outputs', express.static(outputsDir));
-app.use('/templates', express.static(templatesDir));
+// Set streaming and CORS headers for video elements
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
+// Serve static directories with range requests enabled
+const staticOpts = { acceptRanges: true, maxAge: 0 };
+app.use('/uploads', express.static(uploadsDir, staticOpts));
+app.use('/assets', express.static(assetsDir, staticOpts));
+app.use('/fonts', express.static(fontsDir, staticOpts));
+app.use('/outputs', express.static(outputsDir, staticOpts));
+app.use('/templates', express.static(templatesDir, staticOpts));
 
 // Multer storage configuration for uploads
 const storage = multer.diskStorage({

@@ -3,7 +3,7 @@ import { LayoutTemplate, Bookmark, Save, Trash2, Check, Plus, SlidersHorizontal,
 
 export const TemplateManager = ({
   templates = [],
-  activeTemplateId,
+  activeTemplateId = 'main-template',
   onSelectTemplate,
   onSaveNewTemplate,
   onUpdateCurrentTemplate,
@@ -34,7 +34,12 @@ export const TemplateManager = ({
     setTimeout(() => setSaveSuccess(false), 2000);
   };
 
-  const currentTemplate = templates.find((t) => t.id === activeTemplateId) || templates[0];
+  // Ensure there's always at least the main template
+  const templateList = templates && templates.length > 0 
+    ? templates 
+    : [{ id: 'main-template', name: 'Main 9:16 Branded Template' }];
+
+  const currentTemplate = templateList.find((t) => t.id === activeTemplateId) || templateList[0];
 
   return (
     <div className="control-card" style={{ border: '1px solid rgba(99, 102, 241, 0.4)', background: 'linear-gradient(180deg, #181c24 0%, #15181e 100%)' }}>
@@ -75,7 +80,7 @@ export const TemplateManager = ({
           onChange={(e) => onSelectTemplate(e.target.value)}
           style={{ flex: 1, fontWeight: 700, borderColor: '#6366f1' }}
         >
-          {templates.map((t) => (
+          {templateList.map((t) => (
             <option key={t.id} value={t.id}>
               ★ {t.name || t.id}
             </option>
