@@ -352,6 +352,9 @@ app.post('/api/render', async (req, res) => {
     try {
       const {
         videoSrc,
+        videoY = 0,
+        videoHeight = 1920,
+        videoScale = 1.0,
         caption = 'JIM CRAMER: BITCOIN TIDAK BAIK-BAIK SAJA SEGERA JUAL!',
         highlightText = 'JIM CRAMER:',
         font = 'Montserrat ExtraBold',
@@ -362,6 +365,8 @@ app.post('/api/render', async (req, res) => {
         align = 'center',
         fit = 'cover',
         verticalAlign = 'center',
+        captionY = 1120,
+        logoY = 980,
         logoSrc = '/assets/logo.png',
         twibbonSrc = '/assets/twibbon.png',
         logoEnabled = true,
@@ -424,6 +429,9 @@ app.post('/api/render', async (req, res) => {
 
       const inputProps = {
         videoSrc: resolvedVideoUrl,
+        videoY: Number(videoY) || 0,
+        videoHeight: Number(videoHeight) || 1920,
+        videoScale: Number(videoScale) || 1.0,
         caption,
         highlightText,
         font,
@@ -434,6 +442,8 @@ app.post('/api/render', async (req, res) => {
         align,
         fit,
         verticalAlign,
+        captionY: Number(captionY) || 1120,
+        logoY: Number(logoY) || 980,
         logoSrc: resolvedLogoUrl,
         twibbonSrc: resolvedTwibbonUrl,
         logoEnabled,

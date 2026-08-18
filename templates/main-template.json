@@ -7,9 +7,9 @@
   },
   "video": {
     "x": 0,
-    "y": 200,
+    "y": 0,
     "width": 1080,
-    "height": 700,
+    "height": 1920,
     "fit": "cover",
     "verticalAlign": "center"
   },

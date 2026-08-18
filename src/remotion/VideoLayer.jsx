@@ -6,7 +6,6 @@ export function resolveMediaSrc(src) {
   if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('blob:') || src.startsWith('data:')) {
     return src;
   }
-  // Strip leading slash if any for staticFile
   const cleanPath = src.replace(/^\/+/, '');
   return staticFile(cleanPath);
 }
@@ -14,9 +13,10 @@ export function resolveMediaSrc(src) {
 export const VideoLayer = ({
   src,
   x = 0,
-  y = 200,
+  y = 0,
   width = 1080,
-  height = 700,
+  height = 1920,
+  scale = 1.0,
   fit = 'cover', // 'cover' | 'contain' | 'fill'
   verticalAlign = 'center', // 'top' | 'center' | 'bottom'
   muted = false,
@@ -42,6 +42,7 @@ export const VideoLayer = ({
           fontFamily: 'sans-serif',
           border: '2px dashed #444',
           boxSizing: 'border-box',
+          zIndex: 10,
         }}
       >
         No Video Selected
@@ -64,6 +65,7 @@ export const VideoLayer = ({
         height: `${height}px`,
         overflow: 'hidden',
         backgroundColor: '#000000',
+        zIndex: 10,
       }}
     >
       <Video
@@ -74,6 +76,8 @@ export const VideoLayer = ({
           height: '100%',
           objectFit: fit,
           objectPosition: objectPosition,
+          transform: scale !== 1.0 ? `scale(${scale})` : undefined,
+          transformOrigin: 'center center',
         }}
       />
     </div>

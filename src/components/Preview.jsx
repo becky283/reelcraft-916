@@ -6,6 +6,9 @@ import { Play, Eye } from 'lucide-react';
 
 export const Preview = ({
   videoSrc,
+  videoY = 0,
+  videoHeight = 1920,
+  videoScale = 1.0,
   caption,
   highlightText,
   font,
@@ -16,6 +19,8 @@ export const Preview = ({
   align,
   fit,
   verticalAlign,
+  captionY = 1120,
+  logoY = 980,
   logoSrc,
   twibbonSrc,
   logoEnabled,
@@ -30,6 +35,9 @@ export const Preview = ({
 
   const inputProps = useMemo(() => ({
     videoSrc,
+    videoY,
+    videoHeight,
+    videoScale,
     caption,
     highlightText,
     font,
@@ -40,6 +48,8 @@ export const Preview = ({
     align,
     fit,
     verticalAlign,
+    captionY,
+    logoY,
     logoSrc,
     twibbonSrc,
     logoEnabled,
@@ -49,6 +59,9 @@ export const Preview = ({
     template: template || defaultTemplate,
   }), [
     videoSrc,
+    videoY,
+    videoHeight,
+    videoScale,
     caption,
     highlightText,
     font,
@@ -59,6 +72,8 @@ export const Preview = ({
     align,
     fit,
     verticalAlign,
+    captionY,
+    logoY,
     logoSrc,
     twibbonSrc,
     logoEnabled,

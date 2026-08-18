@@ -13,10 +13,11 @@ export const MainComposition = (props) => {
 
   // Video properties (props override template)
   const videoSlot = template.video || {};
-  const videoX = videoSlot.x ?? 0;
-  const videoY = videoSlot.y ?? 200;
-  const videoW = videoSlot.width ?? 1080;
-  const videoH = videoSlot.height ?? 700;
+  const videoX = props.videoX !== undefined ? props.videoX : (videoSlot.x ?? 0);
+  const videoY = props.videoY !== undefined ? props.videoY : (videoSlot.y ?? 0);
+  const videoW = props.videoWidth !== undefined ? props.videoWidth : (videoSlot.width ?? 1080);
+  const videoH = props.videoHeight !== undefined ? props.videoHeight : (videoSlot.height ?? 1920);
+  const videoScale = props.videoScale !== undefined ? props.videoScale : (videoSlot.scale ?? 1.0);
   const videoFit = props.fit || videoSlot.fit || 'cover';
   const videoAlign = props.verticalAlign || videoSlot.verticalAlign || 'center';
 
@@ -30,10 +31,10 @@ export const MainComposition = (props) => {
   const defaultColor = props.defaultColor || captionConfig.defaultColor || '#FFFFFF';
   const highlightColor = props.highlightColor || captionConfig.highlightColor || '#FFD600';
   const captionAlign = props.align || captionConfig.align || 'center';
-  const captionX = captionConfig.x ?? 100;
-  const captionY = captionConfig.y ?? 1120;
-  const captionW = captionConfig.width ?? 880;
-  const captionMaxH = captionConfig.maxHeight ?? 500;
+  const captionX = props.captionX !== undefined ? props.captionX : (captionConfig.x ?? 100);
+  const captionY = props.captionY !== undefined ? props.captionY : (captionConfig.y ?? 1120);
+  const captionW = props.captionWidth !== undefined ? props.captionWidth : (captionConfig.width ?? 880);
+  const captionMaxH = props.captionMaxHeight !== undefined ? props.captionMaxHeight : (captionConfig.maxHeight ?? 500);
   const textShadow = captionConfig.textShadow || '0px 4px 16px rgba(0,0,0,0.95), 0px 2px 6px rgba(0,0,0,0.9)';
   const textStroke = props.textStroke || captionConfig.textStroke || 'none';
 
@@ -41,12 +42,12 @@ export const MainComposition = (props) => {
   const logoConfig = template.logo || {};
   const logoSrc = props.logoSrc !== undefined ? props.logoSrc : logoConfig.path;
   const logoEnabled = props.logoEnabled ?? (logoConfig.enabled !== false);
-  const logoX = logoConfig.x ?? 420;
-  const logoY = logoConfig.y ?? 980;
-  const logoW = logoConfig.width ?? 240;
-  const logoH = logoConfig.height ?? 80;
+  const logoX = props.logoX !== undefined ? props.logoX : (logoConfig.x ?? 420);
+  const logoY = props.logoY !== undefined ? props.logoY : (logoConfig.y ?? 980);
+  const logoW = props.logoWidth !== undefined ? props.logoWidth : (logoConfig.width ?? 240);
+  const logoH = props.logoHeight !== undefined ? props.logoHeight : (logoConfig.height ?? 80);
 
-  // Twibbon properties
+  // Twibbon properties (rendered ON TOP of video)
   const twibbonConfig = template.twibbon || {};
   const twibbonSrc = props.twibbonSrc !== undefined ? props.twibbonSrc : (typeof twibbonConfig === 'string' ? twibbonConfig : twibbonConfig.path);
   const twibbonEnabled = props.twibbonEnabled ?? (twibbonConfig.enabled !== false);
@@ -62,20 +63,21 @@ export const MainComposition = (props) => {
         overflow: 'hidden',
       }}
     >
-      {/* 1. Video Layer */}
+      {/* 1. Base Layer: Video */}
       <VideoLayer
         src={props.videoSrc}
         x={videoX}
         y={videoY}
         width={videoW}
         height={videoH}
+        scale={videoScale}
         fit={videoFit}
         verticalAlign={videoAlign}
         muted={props.muted || false}
         volume={props.volume ?? 1.0}
       />
 
-      {/* 2. Twibbon & Logo Branding Layer */}
+      {/* 2. Top Overlay Layer: Twibbon & Logo Branding (Above Video) */}
       <BrandingLayer
         twibbonSrc={twibbonSrc}
         twibbonEnabled={twibbonEnabled}
@@ -87,7 +89,7 @@ export const MainComposition = (props) => {
         logoHeight={logoH}
       />
 
-      {/* 3. Caption Layer */}
+      {/* 3. Topmost Layer: Caption Text */}
       <CaptionLayer
         caption={captionText}
         highlightText={highlightText}

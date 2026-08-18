@@ -1,5 +1,5 @@
 import React from 'react';
-import { Type, Highlighter, Palette, Sparkles } from 'lucide-react';
+import { Type, Highlighter, Palette, Sparkles, MoveVertical } from 'lucide-react';
 import { parseHighlightedText } from '../remotion/CaptionLayer';
 
 const DEFAULT_COLOR_PRESETS = [
@@ -33,6 +33,8 @@ export const CaptionEditor = ({
   onToggleUppercase,
   textStroke,
   onChangeTextStroke,
+  captionY = 1120,
+  onChangeCaptionY,
 }) => {
   const displayText = uppercase ? caption.toUpperCase() : caption;
   const displayHighlight = uppercase ? highlightText.toUpperCase() : highlightText;
@@ -90,6 +92,46 @@ export const CaptionEditor = ({
           Matching words will automatically receive the highlight color below.
         </span>
       </div>
+
+      {/* Caption Y Position Slider */}
+      {onChangeCaptionY && (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <label style={{ margin: 0 }}>
+              <MoveVertical size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+              Caption Vertical Position (Y)
+            </label>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+              {captionY}px
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <input
+              type="range"
+              min="400"
+              max="1700"
+              step="10"
+              value={captionY}
+              onChange={(e) => onChangeCaptionY(Number(e.target.value))}
+              style={{ flex: 1, accentColor: '#6366f1' }}
+            />
+            <button
+              type="button"
+              onClick={() => onChangeCaptionY(1120)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#9ca3af',
+                fontSize: '11px',
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Live Text Breakdown Badge */}
       {caption && (

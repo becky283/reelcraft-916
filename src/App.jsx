@@ -10,7 +10,7 @@ import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v1';
+const STORAGE_KEY = 'auto_editor_user_settings_v2';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -42,13 +42,18 @@ export function App() {
   const [highlightColor, setHighlightColor] = useState(saved.highlightColor || '#FFD600');
   const [uppercase, setUppercase] = useState(saved.uppercase ?? true);
   const [textStroke, setTextStroke] = useState(saved.textStroke || 'none');
+  const [captionY, setCaptionY] = useState(saved.captionY ?? 1120);
 
   // Style State
   const [font, setFont] = useState(saved.font || 'Montserrat ExtraBold');
   const [fontSize, setFontSize] = useState(saved.fontSize || 64);
   const [align, setAlign] = useState(saved.align || 'center');
 
-  // Video Fit State
+  // Video Fit & Position State
+  // Default videoY to 0 and videoHeight to 1920 so 9:16 portrait videos fill screen behind twibbon
+  const [videoY, setVideoY] = useState(saved.videoY ?? 0);
+  const [videoHeight, setVideoHeight] = useState(saved.videoHeight ?? 1920);
+  const [videoScale, setVideoScale] = useState(saved.videoScale ?? 1.0);
   const [fit, setFit] = useState(saved.fit || 'cover');
   const [verticalAlign, setVerticalAlign] = useState(saved.verticalAlign || 'center');
 
@@ -57,6 +62,7 @@ export function App() {
   const [twibbonSrc, setTwibbonSrc] = useState(saved.twibbonSrc || '/assets/twibbon.png');
   const [logoEnabled, setLogoEnabled] = useState(saved.logoEnabled ?? true);
   const [logoSrc, setLogoSrc] = useState(saved.logoSrc || '/assets/logo.png');
+  const [logoY, setLogoY] = useState(saved.logoY ?? 980);
 
   // Outputs / Template State
   const [template, setTemplate] = useState(defaultTemplate);
@@ -83,14 +89,19 @@ export function App() {
         highlightColor,
         uppercase,
         textStroke,
+        captionY,
         fit,
         verticalAlign,
+        videoY,
+        videoHeight,
+        videoScale,
         twibbonEnabled,
         logoEnabled,
+        logoY,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
     } catch (e) {}
-  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, fit, verticalAlign, twibbonEnabled, logoEnabled]);
+  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, twibbonEnabled, logoEnabled, logoY]);
 
   // Fetch initial backend data (samples, outputs, template)
   const refreshData = useCallback(async () => {
@@ -156,10 +167,22 @@ export function App() {
         fps: data.fps,
         hasAudio: data.hasAudio,
       });
+
+      // Auto-detect aspect ratio: if portrait (9:16), set Full Screen layout by default!
+      if (data.height > data.width) {
+        setVideoY(0);
+        setVideoHeight(1920);
+        setFit('cover');
+      } else {
+        // Landscape video: top or upper header slot
+        setVideoY(120);
+        setVideoHeight(860);
+        setFit('cover');
+      }
+
       refreshData();
     } catch (err) {
       console.error('Error uploading video:', err);
-      // Fallback to local object URL for preview if server upload fails
       const localUrl = URL.createObjectURL(file);
       setVideoSrc(localUrl);
       setVideoMeta({
@@ -179,6 +202,15 @@ export function App() {
   const handleSelectSample = (sample) => {
     setVideoSrc(sample.url);
     setVideoMeta(sample);
+    if (sample.height > sample.width) {
+      setVideoY(0);
+      setVideoHeight(1920);
+      setFit('cover');
+    } else {
+      setVideoY(120);
+      setVideoHeight(860);
+      setFit('cover');
+    }
   };
 
   // Handle Asset Upload (Logo / Twibbon)
@@ -224,6 +256,9 @@ export function App() {
     try {
       const payload = {
         videoSrc,
+        videoY,
+        videoHeight,
+        videoScale,
         caption,
         highlightText,
         font,
@@ -234,6 +269,8 @@ export function App() {
         align,
         fit,
         verticalAlign,
+        captionY,
+        logoY,
         logoSrc,
         twibbonSrc,
         logoEnabled,
@@ -327,10 +364,15 @@ export function App() {
       setHighlightColor('#FFD600');
       setUppercase(true);
       setTextStroke('none');
+      setCaptionY(1120);
+      setVideoY(0);
+      setVideoHeight(1920);
+      setVideoScale(1.0);
       setFit('cover');
       setVerticalAlign('center');
       setTwibbonEnabled(true);
       setLogoEnabled(true);
+      setLogoY(980);
     }
   };
 
@@ -357,7 +399,21 @@ export function App() {
             isUploading={isUploading}
           />
 
-          {/* 2. Caption Editor */}
+          {/* 2. Video Framing & Position */}
+          <VideoFitControls
+            fit={fit}
+            onChangeFit={setFit}
+            verticalAlign={verticalAlign}
+            onChangeVerticalAlign={setVerticalAlign}
+            videoY={videoY}
+            onChangeVideoY={setVideoY}
+            videoHeight={videoHeight}
+            onChangeVideoHeight={setVideoHeight}
+            videoScale={videoScale}
+            onChangeVideoScale={setVideoScale}
+          />
+
+          {/* 3. Caption Editor */}
           <CaptionEditor
             caption={caption}
             onChangeCaption={setCaption}
@@ -371,9 +427,11 @@ export function App() {
             onToggleUppercase={setUppercase}
             textStroke={textStroke}
             onChangeTextStroke={setTextStroke}
+            captionY={captionY}
+            onChangeCaptionY={setCaptionY}
           />
 
-          {/* 3. Typography & Styling */}
+          {/* 4. Typography & Styling */}
           <StyleControls
             font={font}
             onChangeFont={setFont}
@@ -381,14 +439,6 @@ export function App() {
             onChangeFontSize={setFontSize}
             align={align}
             onChangeAlign={setAlign}
-          />
-
-          {/* 4. Video Fit & Alignment */}
-          <VideoFitControls
-            fit={fit}
-            onChangeFit={setFit}
-            verticalAlign={verticalAlign}
-            onChangeVerticalAlign={setVerticalAlign}
           />
 
           {/* 5. Twibbon & Logo Overlays */}
@@ -400,6 +450,8 @@ export function App() {
             onToggleLogo={setLogoEnabled}
             logoSrc={logoSrc}
             onUploadAsset={handleUploadAsset}
+            logoY={logoY}
+            onChangeLogoY={setLogoY}
           />
 
           {/* 6. Big Generate Action Button */}
@@ -420,6 +472,9 @@ export function App() {
         <main className="preview-area">
           <Preview
             videoSrc={videoSrc}
+            videoY={videoY}
+            videoHeight={videoHeight}
+            videoScale={videoScale}
             caption={caption}
             highlightText={highlightText}
             font={font}
@@ -430,6 +485,8 @@ export function App() {
             align={align}
             fit={fit}
             verticalAlign={verticalAlign}
+            captionY={captionY}
+            logoY={logoY}
             logoSrc={logoSrc}
             twibbonSrc={twibbonSrc}
             logoEnabled={logoEnabled}
