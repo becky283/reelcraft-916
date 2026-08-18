@@ -1,13 +1,19 @@
 import React from 'react';
-import { Video, staticFile } from 'remotion';
+import { Video } from 'remotion';
 
 export function resolveMediaSrc(src) {
   if (!src) return '';
-  if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('blob:') || src.startsWith('data:')) {
+  if (
+    src.startsWith('http://') ||
+    src.startsWith('https://') ||
+    src.startsWith('blob:') ||
+    src.startsWith('data:') ||
+    src.startsWith('/')
+  ) {
     return src;
   }
-  const cleanPath = src.replace(/^\/+/, '');
-  return staticFile(cleanPath);
+  // Convert relative path to root-relative path for Vite proxy and Express
+  return `/${src}`;
 }
 
 export const VideoLayer = ({
