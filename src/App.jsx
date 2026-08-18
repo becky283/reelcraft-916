@@ -11,7 +11,7 @@ import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v3';
+const STORAGE_KEY = 'auto_editor_user_settings_v4';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -69,6 +69,7 @@ export function App() {
   const [twibbonSrc, setTwibbonSrc] = useState(saved.twibbonSrc || '/assets/twibbon.png');
   const [logoEnabled, setLogoEnabled] = useState(saved.logoEnabled ?? true);
   const [logoSrc, setLogoSrc] = useState(saved.logoSrc || '/assets/logo.png');
+  const [logoWidth, setLogoWidth] = useState(saved.logoWidth ?? 240);
   const [logoY, setLogoY] = useState(saved.logoY ?? 980);
 
   // Outputs / Template State
@@ -109,11 +110,12 @@ export function App() {
         gradientOpacity,
         twibbonEnabled,
         logoEnabled,
+        logoWidth,
         logoY,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
     } catch (e) {}
-  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, logoEnabled, logoY]);
+  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, logoEnabled, logoWidth, logoY]);
 
   // Fetch initial backend data (samples, outputs, template)
   const refreshData = useCallback(async () => {
@@ -185,7 +187,6 @@ export function App() {
         setVideoHeight(1920);
         setFit('cover');
       } else {
-        // Landscape video: center or top with blurred backdrop fill
         setVideoY(120);
         setVideoHeight(860);
         setFit('cover');
@@ -287,6 +288,7 @@ export function App() {
         align,
         captionY,
         logoY,
+        logoWidth,
         logoSrc,
         twibbonSrc,
         logoEnabled,
@@ -393,6 +395,7 @@ export function App() {
       setGradientOpacity(1.0);
       setTwibbonEnabled(true);
       setLogoEnabled(true);
+      setLogoWidth(240);
       setLogoY(980);
     }
   };
@@ -485,6 +488,8 @@ export function App() {
             onToggleLogo={setLogoEnabled}
             logoSrc={logoSrc}
             onUploadAsset={handleUploadAsset}
+            logoWidth={logoWidth}
+            onChangeLogoWidth={setLogoWidth}
             logoY={logoY}
             onChangeLogoY={setLogoY}
           />
@@ -527,6 +532,7 @@ export function App() {
             align={align}
             captionY={captionY}
             logoY={logoY}
+            logoWidth={logoWidth}
             logoSrc={logoSrc}
             twibbonSrc={twibbonSrc}
             logoEnabled={logoEnabled}

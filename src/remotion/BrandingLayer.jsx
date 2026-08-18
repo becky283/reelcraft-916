@@ -7,13 +7,18 @@ export const BrandingLayer = ({
   twibbonEnabled = true,
   logoSrc,
   logoEnabled = true,
-  logoX = 420,
+  logoX,
   logoY = 980,
   logoWidth = 240,
-  logoHeight = 80,
+  logoHeight,
+  logoCenter = true,
 }) => {
   const resolvedLogo = logoSrc ? resolveMediaSrc(logoSrc) : '';
   const resolvedTwibbon = twibbonSrc ? resolveMediaSrc(twibbonSrc) : '';
+
+  // Calculate horizontal position
+  const computedX = logoX !== undefined ? logoX : Math.round((1080 - logoWidth) / 2);
+  const computedHeight = logoHeight || Math.round(logoWidth * 0.55);
 
   return (
     <>
@@ -22,10 +27,10 @@ export const BrandingLayer = ({
         <div
           style={{
             position: 'absolute',
-            left: `${logoX}px`,
+            left: `${computedX}px`,
             top: `${logoY}px`,
             width: `${logoWidth}px`,
-            height: `${logoHeight}px`,
+            height: `${computedHeight}px`,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -36,8 +41,8 @@ export const BrandingLayer = ({
           <Img
             src={resolvedLogo}
             style={{
-              maxWidth: '100%',
-              maxHeight: '100%',
+              width: '100%',
+              height: '100%',
               objectFit: 'contain',
             }}
           />
