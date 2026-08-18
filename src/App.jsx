@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { VideoUploader } from './components/VideoUploader';
+import { VideoFitControls } from './components/VideoFitControls';
+import { GradientControls } from './components/GradientControls';
 import { CaptionEditor } from './components/CaptionEditor';
 import { StyleControls } from './components/StyleControls';
-import { VideoFitControls } from './components/VideoFitControls';
 import { BrandingControls } from './components/BrandingControls';
 import { Preview } from './components/Preview';
 import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v2';
+const STORAGE_KEY = 'auto_editor_user_settings_v3';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -35,6 +36,20 @@ export function App() {
   const [samples, setSamples] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
+  // Video Fit & Position State
+  const [videoY, setVideoY] = useState(saved.videoY ?? 0);
+  const [videoHeight, setVideoHeight] = useState(saved.videoHeight ?? 1920);
+  const [videoScale, setVideoScale] = useState(saved.videoScale ?? 1.0);
+  const [fit, setFit] = useState(saved.fit || 'cover');
+  const [verticalAlign, setVerticalAlign] = useState(saved.verticalAlign || 'center');
+  const [backdropBlur, setBackdropBlur] = useState(saved.backdropBlur ?? true);
+
+  // Gradient Fades State
+  const [topGradientHeight, setTopGradientHeight] = useState(saved.topGradientHeight ?? 0);
+  const [bottomGradientHeight, setBottomGradientHeight] = useState(saved.bottomGradientHeight ?? 380);
+  const [gradientColor, setGradientColor] = useState(saved.gradientColor || '#000000');
+  const [gradientOpacity, setGradientOpacity] = useState(saved.gradientOpacity ?? 1.0);
+
   // Caption State
   const [caption, setCaption] = useState(saved.caption ?? 'JIM CRAMER: BITCOIN TIDAK BAIK-BAIK SAJA SEGERA JUAL!');
   const [highlightText, setHighlightText] = useState(saved.highlightText ?? 'JIM CRAMER:');
@@ -48,14 +63,6 @@ export function App() {
   const [font, setFont] = useState(saved.font || 'Montserrat ExtraBold');
   const [fontSize, setFontSize] = useState(saved.fontSize || 64);
   const [align, setAlign] = useState(saved.align || 'center');
-
-  // Video Fit & Position State
-  // Default videoY to 0 and videoHeight to 1920 so 9:16 portrait videos fill screen behind twibbon
-  const [videoY, setVideoY] = useState(saved.videoY ?? 0);
-  const [videoHeight, setVideoHeight] = useState(saved.videoHeight ?? 1920);
-  const [videoScale, setVideoScale] = useState(saved.videoScale ?? 1.0);
-  const [fit, setFit] = useState(saved.fit || 'cover');
-  const [verticalAlign, setVerticalAlign] = useState(saved.verticalAlign || 'center');
 
   // Branding State
   const [twibbonEnabled, setTwibbonEnabled] = useState(saved.twibbonEnabled ?? true);
@@ -95,13 +102,18 @@ export function App() {
         videoY,
         videoHeight,
         videoScale,
+        backdropBlur,
+        topGradientHeight,
+        bottomGradientHeight,
+        gradientColor,
+        gradientOpacity,
         twibbonEnabled,
         logoEnabled,
         logoY,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
     } catch (e) {}
-  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, twibbonEnabled, logoEnabled, logoY]);
+  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, logoEnabled, logoY]);
 
   // Fetch initial backend data (samples, outputs, template)
   const refreshData = useCallback(async () => {
@@ -112,7 +124,6 @@ export function App() {
         const data = await sampleRes.json();
         if (data.samples && data.samples.length > 0) {
           setSamples(data.samples);
-          // If no video is selected yet, select first sample
           if (!videoSrc) {
             setVideoSrc(data.samples[0].url);
             setVideoMeta(data.samples[0]);
@@ -168,13 +179,13 @@ export function App() {
         hasAudio: data.hasAudio,
       });
 
-      // Auto-detect aspect ratio: if portrait (9:16), set Full Screen layout by default!
+      // Auto-detect layout based on aspect ratio
       if (data.height > data.width) {
         setVideoY(0);
         setVideoHeight(1920);
         setFit('cover');
       } else {
-        // Landscape video: top or upper header slot
+        // Landscape video: center or top with blurred backdrop fill
         setVideoY(120);
         setVideoHeight(860);
         setFit('cover');
@@ -259,6 +270,13 @@ export function App() {
         videoY,
         videoHeight,
         videoScale,
+        fit,
+        verticalAlign,
+        backdropBlur,
+        topGradientHeight,
+        bottomGradientHeight,
+        gradientColor,
+        gradientOpacity,
         caption,
         highlightText,
         font,
@@ -267,8 +285,6 @@ export function App() {
         defaultColor,
         highlightColor,
         align,
-        fit,
-        verticalAlign,
         captionY,
         logoY,
         logoSrc,
@@ -355,7 +371,7 @@ export function App() {
 
   // Reset to default presets
   const handleResetSettings = () => {
-    if (window.confirm('Reset caption style and framing to default template presets?')) {
+    if (window.confirm('Reset caption style, gradients, and framing to default presets?')) {
       localStorage.removeItem(STORAGE_KEY);
       setFont('Montserrat ExtraBold');
       setFontSize(64);
@@ -370,6 +386,11 @@ export function App() {
       setVideoScale(1.0);
       setFit('cover');
       setVerticalAlign('center');
+      setBackdropBlur(true);
+      setTopGradientHeight(0);
+      setBottomGradientHeight(380);
+      setGradientColor('#000000');
+      setGradientOpacity(1.0);
       setTwibbonEnabled(true);
       setLogoEnabled(true);
       setLogoY(980);
@@ -413,7 +434,21 @@ export function App() {
             onChangeVideoScale={setVideoScale}
           />
 
-          {/* 3. Caption Editor */}
+          {/* 3. Gradient Fades & Blankspace Fill */}
+          <GradientControls
+            topGradientHeight={topGradientHeight}
+            onChangeTopGradientHeight={setTopGradientHeight}
+            bottomGradientHeight={bottomGradientHeight}
+            onChangeBottomGradientHeight={setBottomGradientHeight}
+            gradientColor={gradientColor}
+            onChangeGradientColor={setGradientColor}
+            gradientOpacity={gradientOpacity}
+            onChangeGradientOpacity={setGradientOpacity}
+            backdropBlur={backdropBlur}
+            onChangeBackdropBlur={setBackdropBlur}
+          />
+
+          {/* 4. Caption Editor */}
           <CaptionEditor
             caption={caption}
             onChangeCaption={setCaption}
@@ -431,7 +466,7 @@ export function App() {
             onChangeCaptionY={setCaptionY}
           />
 
-          {/* 4. Typography & Styling */}
+          {/* 5. Typography & Styling */}
           <StyleControls
             font={font}
             onChangeFont={setFont}
@@ -441,7 +476,7 @@ export function App() {
             onChangeAlign={setAlign}
           />
 
-          {/* 5. Twibbon & Logo Overlays */}
+          {/* 6. Twibbon & Logo Overlays */}
           <BrandingControls
             twibbonEnabled={twibbonEnabled}
             onToggleTwibbon={setTwibbonEnabled}
@@ -454,7 +489,7 @@ export function App() {
             onChangeLogoY={setLogoY}
           />
 
-          {/* 6. Big Generate Action Button */}
+          {/* 7. Big Generate Action Button */}
           <div style={{ marginTop: 'auto', paddingTop: '10px' }}>
             <button
               className="btn-primary"
@@ -475,6 +510,13 @@ export function App() {
             videoY={videoY}
             videoHeight={videoHeight}
             videoScale={videoScale}
+            fit={fit}
+            verticalAlign={verticalAlign}
+            backdropBlur={backdropBlur}
+            topGradientHeight={topGradientHeight}
+            bottomGradientHeight={bottomGradientHeight}
+            gradientColor={gradientColor}
+            gradientOpacity={gradientOpacity}
             caption={caption}
             highlightText={highlightText}
             font={font}
@@ -483,8 +525,6 @@ export function App() {
             defaultColor={defaultColor}
             highlightColor={highlightColor}
             align={align}
-            fit={fit}
-            verticalAlign={verticalAlign}
             captionY={captionY}
             logoY={logoY}
             logoSrc={logoSrc}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
 import { VideoLayer } from './VideoLayer';
+import { GradientLayer } from './GradientLayer';
 import { BrandingLayer } from './BrandingLayer';
 import { CaptionLayer } from './CaptionLayer';
 import defaultTemplate from '../../templates/main-template.json';
@@ -20,6 +21,14 @@ export const MainComposition = (props) => {
   const videoScale = props.videoScale !== undefined ? props.videoScale : (videoSlot.scale ?? 1.0);
   const videoFit = props.fit || videoSlot.fit || 'cover';
   const videoAlign = props.verticalAlign || videoSlot.verticalAlign || 'center';
+  const backdropBlur = props.backdropBlur ?? (videoSlot.backdropBlur ?? false);
+
+  // Gradient Fade Properties
+  const gradientConfig = template.gradient || {};
+  const topGradientHeight = props.topGradientHeight !== undefined ? props.topGradientHeight : (gradientConfig.topHeight ?? 0);
+  const bottomGradientHeight = props.bottomGradientHeight !== undefined ? props.bottomGradientHeight : (gradientConfig.bottomHeight ?? 350);
+  const gradientColor = props.gradientColor || gradientConfig.color || '#000000';
+  const gradientOpacity = props.gradientOpacity !== undefined ? props.gradientOpacity : (gradientConfig.opacity ?? 1.0);
 
   // Caption properties (props override template)
   const captionConfig = template.caption || {};
@@ -47,7 +56,7 @@ export const MainComposition = (props) => {
   const logoW = props.logoWidth !== undefined ? props.logoWidth : (logoConfig.width ?? 240);
   const logoH = props.logoHeight !== undefined ? props.logoHeight : (logoConfig.height ?? 80);
 
-  // Twibbon properties (rendered ON TOP of video)
+  // Twibbon properties (rendered ON TOP of video and gradients)
   const twibbonConfig = template.twibbon || {};
   const twibbonSrc = props.twibbonSrc !== undefined ? props.twibbonSrc : (typeof twibbonConfig === 'string' ? twibbonConfig : twibbonConfig.path);
   const twibbonEnabled = props.twibbonEnabled ?? (twibbonConfig.enabled !== false);
@@ -63,7 +72,7 @@ export const MainComposition = (props) => {
         overflow: 'hidden',
       }}
     >
-      {/* 1. Base Layer: Video */}
+      {/* 1. Base Layer: Video + Optional Blurred Mirror Backdrop */}
       <VideoLayer
         src={props.videoSrc}
         x={videoX}
@@ -75,9 +84,18 @@ export const MainComposition = (props) => {
         verticalAlign={videoAlign}
         muted={props.muted || false}
         volume={props.volume ?? 1.0}
+        backdropBlur={backdropBlur}
       />
 
-      {/* 2. Top Overlay Layer: Twibbon & Logo Branding (Above Video) */}
+      {/* 2. Seamless Gradient Edge Feathers (Top & Bottom Fades) */}
+      <GradientLayer
+        topHeight={topGradientHeight}
+        bottomHeight={bottomGradientHeight}
+        color={gradientColor}
+        opacity={gradientOpacity}
+      />
+
+      {/* 3. Top Overlay Layer: Twibbon & Logo Branding (Above Video & Fades) */}
       <BrandingLayer
         twibbonSrc={twibbonSrc}
         twibbonEnabled={twibbonEnabled}
@@ -89,7 +107,7 @@ export const MainComposition = (props) => {
         logoHeight={logoH}
       />
 
-      {/* 3. Topmost Layer: Caption Text */}
+      {/* 4. Topmost Layer: Caption Text */}
       <CaptionLayer
         caption={captionText}
         highlightText={highlightText}
