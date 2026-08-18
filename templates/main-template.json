@@ -1,0 +1,44 @@
+{
+  "name": "Main 9:16 Branded Template",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "video": {
+    "x": 0,
+    "y": 200,
+    "width": 1080,
+    "height": 700,
+    "fit": "cover",
+    "verticalAlign": "center"
+  },
+  "caption": {
+    "x": 100,
+    "y": 1120,
+    "width": 880,
+    "maxHeight": 500,
+    "font": "Montserrat ExtraBold",
+    "fontSize": 64,
+    "minFontSize": 36,
+    "lineHeight": 1.25,
+    "align": "center",
+    "defaultColor": "#FFFFFF",
+    "highlightColor": "#FFD600",
+    "textShadow": "0px 4px 16px rgba(0,0,0,0.9)",
+    "textStroke": "none"
+  },
+  "logo": {
+    "x": 420,
+    "y": 980,
+    "width": 240,
+    "height": 80,
+    "path": "assets/logo.png",
+    "enabled": true
+  },
+  "twibbon": {
+    "path": "assets/twibbon.png",
+    "enabled": true
+  },
+  "backgroundColor": "#000000"
+}
