@@ -187,11 +187,34 @@ app.get('/api/samples', (req, res) => {
   }
 });
 
-// 5. Template Config API
+// 5. Template Configs API (Multi-Template support)
+app.get('/api/templates', (req, res) => {
+  try {
+    const files = fs.readdirSync(templatesDir).filter(f => f.endsWith('.json'));
+    const templates = files.map(file => {
+      try {
+        const content = JSON.parse(fs.readFileSync(path.join(templatesDir, file), 'utf-8'));
+        return {
+          id: file.replace('.json', ''),
+          filename: file,
+          name: content.name || file.replace('.json', ''),
+          ...content,
+        };
+      } catch(e) {
+        return null;
+      }
+    }).filter(Boolean);
+    res.json({ templates });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/template', (req, res) => {
   try {
-    if (fs.existsSync(templateFile)) {
-      const data = JSON.parse(fs.readFileSync(templateFile, 'utf-8'));
+    const targetFile = req.query.id ? path.join(templatesDir, `${req.query.id}.json`) : templateFile;
+    if (fs.existsSync(targetFile)) {
+      const data = JSON.parse(fs.readFileSync(targetFile, 'utf-8'));
       res.json(data);
     } else {
       res.status(404).json({ error: 'Template file not found' });
@@ -201,10 +224,40 @@ app.get('/api/template', (req, res) => {
   }
 });
 
-app.post('/api/template', (req, res) => {
+app.post('/api/templates', (req, res) => {
   try {
-    fs.writeFileSync(templateFile, JSON.stringify(req.body, null, 2), 'utf-8');
-    res.json({ success: true, message: 'Template updated successfully' });
+    const templateData = req.body;
+    const cleanId = (templateData.id || templateData.name || 'custom-template')
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]/g, '-')
+      .replace(/-+/g, '-');
+    
+    const targetPath = path.join(templatesDir, `${cleanId}.json`);
+    const finalData = {
+      id: cleanId,
+      name: templateData.name || 'Untitled Template',
+      ...templateData,
+    };
+    fs.writeFileSync(targetPath, JSON.stringify(finalData, null, 2), 'utf-8');
+    res.json({ success: true, template: finalData });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/templates/:id', (req, res) => {
+  try {
+    const templateId = req.params.id;
+    if (templateId === 'main-template') {
+      return res.status(400).json({ error: 'Cannot delete default main template' });
+    }
+    const targetPath = path.join(templatesDir, `${templateId}.json`);
+    if (fs.existsSync(targetPath)) {
+      fs.unlinkSync(targetPath);
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: 'Template not found' });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

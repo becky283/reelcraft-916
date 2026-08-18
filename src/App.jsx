@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
+import { TemplateManager } from './components/TemplateManager';
 import { VideoUploader } from './components/VideoUploader';
 import { VideoFitControls } from './components/VideoFitControls';
 import { GradientControls } from './components/GradientControls';
@@ -8,10 +9,10 @@ import { StyleControls } from './components/StyleControls';
 import { BrandingControls } from './components/BrandingControls';
 import { Preview } from './components/Preview';
 import { GenerateModal } from './components/GenerateModal';
-import { Play, Sparkles, FolderOpen, Film } from 'lucide-react';
+import { Play, Sparkles, FolderOpen, Film, ChevronDown, ChevronUp, Sliders } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v4';
+const STORAGE_KEY = 'auto_editor_user_settings_v5';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -23,6 +24,11 @@ export function App() {
       return {};
     }
   })();
+
+  // Template State
+  const [templates, setTemplates] = useState([]);
+  const [activeTemplateId, setActiveTemplateId] = useState(saved.activeTemplateId || 'main-template');
+  const [isSimpleMode, setIsSimpleMode] = useState(saved.isSimpleMode ?? true); // Default to Simple Mode for clean workflow!
 
   // Core State
   const [videoSrc, setVideoSrc] = useState(saved.videoSrc || '/uploads/sample-landscape.mp4');
@@ -72,8 +78,7 @@ export function App() {
   const [logoWidth, setLogoWidth] = useState(saved.logoWidth ?? 240);
   const [logoY, setLogoY] = useState(saved.logoY ?? 980);
 
-  // Outputs / Template State
-  const [template, setTemplate] = useState(defaultTemplate);
+  // Outputs State
   const [outputsList, setOutputsList] = useState([]);
 
   // Render Modal State
@@ -90,6 +95,8 @@ export function App() {
   useEffect(() => {
     try {
       const currentSettings = {
+        activeTemplateId,
+        isSimpleMode,
         font,
         fontSize,
         align,
@@ -109,18 +116,29 @@ export function App() {
         gradientColor,
         gradientOpacity,
         twibbonEnabled,
+        twibbonSrc,
         logoEnabled,
+        logoSrc,
         logoWidth,
         logoY,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
     } catch (e) {}
-  }, [font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, logoEnabled, logoWidth, logoY]);
+  }, [activeTemplateId, isSimpleMode, font, fontSize, align, defaultColor, highlightColor, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, twibbonSrc, logoEnabled, logoSrc, logoWidth, logoY]);
 
-  // Fetch initial backend data (samples, outputs, template)
+  // Fetch initial backend data (templates, samples, outputs)
   const refreshData = useCallback(async () => {
     try {
-      // Samples
+      // 1. Templates
+      const tmplRes = await fetch('/api/templates');
+      if (tmplRes.ok) {
+        const data = await tmplRes.json();
+        if (data.templates && data.templates.length > 0) {
+          setTemplates(data.templates);
+        }
+      }
+
+      // 2. Samples
       const sampleRes = await fetch('/api/samples');
       if (sampleRes.ok) {
         const data = await sampleRes.json();
@@ -133,18 +151,11 @@ export function App() {
         }
       }
 
-      // Outputs count
+      // 3. Outputs count
       const outRes = await fetch('/api/outputs');
       if (outRes.ok) {
         const data = await outRes.json();
         setOutputsList(data.outputs || []);
-      }
-
-      // Template
-      const tmplRes = await fetch('/api/template');
-      if (tmplRes.ok) {
-        const data = await tmplRes.json();
-        setTemplate(data);
       }
     } catch (e) {
       console.warn('Backend offline or not yet ready:', e.message);
@@ -154,6 +165,210 @@ export function App() {
   useEffect(() => {
     refreshData();
   }, [refreshData]);
+
+  // Apply Template Settings to State
+  const applyTemplateToState = (t) => {
+    if (!t) return;
+    if (t.video) {
+      setVideoY(t.video.y ?? 0);
+      setVideoHeight(t.video.height ?? 1920);
+      setVideoScale(t.video.scale ?? 1.0);
+      setFit(t.video.fit || 'cover');
+      setVerticalAlign(t.video.verticalAlign || 'center');
+      setBackdropBlur(t.video.backdropBlur ?? true);
+    }
+    if (t.gradient) {
+      setTopGradientHeight(t.gradient.topHeight ?? 0);
+      setBottomGradientHeight(t.gradient.bottomHeight ?? 380);
+      setGradientColor(t.gradient.color || '#000000');
+      setGradientOpacity(t.gradient.opacity ?? 1.0);
+    }
+    if (t.caption) {
+      setFont(t.caption.font || 'Montserrat ExtraBold');
+      setFontSize(t.caption.fontSize || 64);
+      setDefaultColor(t.caption.defaultColor || '#FFFFFF');
+      setHighlightColor(t.caption.highlightColor || '#FFD600');
+      setAlign(t.caption.align || 'center');
+      setCaptionY(t.caption.y ?? 1120);
+      setTextStroke(t.caption.textStroke || 'none');
+      if (t.caption.uppercase !== undefined) setUppercase(t.caption.uppercase);
+    }
+    if (t.logo) {
+      setLogoEnabled(t.logo.enabled !== false);
+      if (t.logo.path) setLogoSrc(t.logo.path);
+      setLogoWidth(t.logo.width || 240);
+      setLogoY(t.logo.y ?? 980);
+    }
+    if (t.twibbon) {
+      const isString = typeof t.twibbon === 'string';
+      setTwibbonEnabled(isString ? true : (t.twibbon.enabled !== false));
+      const p = isString ? t.twibbon : t.twibbon.path;
+      if (p) setTwibbonSrc(p);
+    }
+  };
+
+  // Switch Template
+  const handleSelectTemplate = async (templateId) => {
+    setActiveTemplateId(templateId);
+    try {
+      const res = await fetch(`/api/template?id=${templateId}`);
+      if (res.ok) {
+        const t = await res.json();
+        applyTemplateToState(t);
+      }
+    } catch (e) {
+      console.error('Error loading template:', e);
+    }
+  };
+
+  // Save Current Settings as New Template Preset
+  const handleSaveNewTemplate = async (name) => {
+    try {
+      const templateData = {
+        name,
+        canvas: { width: 1080, height: 1920, fps: 30 },
+        video: {
+          x: 0,
+          y: videoY,
+          width: 1080,
+          height: videoHeight,
+          scale: videoScale,
+          fit,
+          verticalAlign,
+          backdropBlur,
+        },
+        gradient: {
+          topHeight: topGradientHeight,
+          bottomHeight: bottomGradientHeight,
+          color: gradientColor,
+          opacity: gradientOpacity,
+        },
+        caption: {
+          font,
+          fontSize,
+          minFontSize: 34,
+          defaultColor,
+          highlightColor,
+          align,
+          y: captionY,
+          width: 880,
+          maxHeight: 500,
+          textStroke,
+          uppercase,
+        },
+        logo: {
+          enabled: logoEnabled,
+          path: logoSrc,
+          width: logoWidth,
+          height: Math.round(logoWidth * 0.55),
+          y: logoY,
+          x: Math.round((1080 - logoWidth) / 2),
+        },
+        twibbon: {
+          enabled: twibbonEnabled,
+          path: twibbonSrc,
+        },
+        backgroundColor: '#000000',
+      };
+
+      const res = await fetch('/api/templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(templateData),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setActiveTemplateId(data.template.id);
+        refreshData();
+      }
+    } catch (e) {
+      console.error('Failed to save new template:', e);
+    }
+  };
+
+  // Update Current Template Preset
+  const handleUpdateCurrentTemplate = async () => {
+    const current = templates.find((t) => t.id === activeTemplateId) || templates[0];
+    const name = current?.name || 'Main 9:16 Branded Template';
+    const id = activeTemplateId || 'main-template';
+
+    try {
+      const templateData = {
+        id,
+        name,
+        canvas: { width: 1080, height: 1920, fps: 30 },
+        video: {
+          x: 0,
+          y: videoY,
+          width: 1080,
+          height: videoHeight,
+          scale: videoScale,
+          fit,
+          verticalAlign,
+          backdropBlur,
+        },
+        gradient: {
+          topHeight: topGradientHeight,
+          bottomHeight: bottomGradientHeight,
+          color: gradientColor,
+          opacity: gradientOpacity,
+        },
+        caption: {
+          font,
+          fontSize,
+          minFontSize: 34,
+          defaultColor,
+          highlightColor,
+          align,
+          y: captionY,
+          width: 880,
+          maxHeight: 500,
+          textStroke,
+          uppercase,
+        },
+        logo: {
+          enabled: logoEnabled,
+          path: logoSrc,
+          width: logoWidth,
+          height: Math.round(logoWidth * 0.55),
+          y: logoY,
+          x: Math.round((1080 - logoWidth) / 2),
+        },
+        twibbon: {
+          enabled: twibbonEnabled,
+          path: twibbonSrc,
+        },
+        backgroundColor: '#000000',
+      };
+
+      const res = await fetch('/api/templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(templateData),
+      });
+
+      if (res.ok) {
+        refreshData();
+      }
+    } catch (e) {
+      console.error('Failed to update template:', e);
+    }
+  };
+
+  // Delete Template
+  const handleDeleteTemplate = async (id) => {
+    try {
+      const res = await fetch(`/api/templates/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setActiveTemplateId('main-template');
+        refreshData();
+        handleSelectTemplate('main-template');
+      }
+    } catch (e) {
+      console.error('Failed to delete template:', e);
+    }
+  };
 
   // Handle Video File Upload
   const handleSelectVideo = async (file) => {
@@ -181,14 +396,10 @@ export function App() {
         hasAudio: data.hasAudio,
       });
 
-      // Auto-detect layout based on aspect ratio
+      // Auto-adjust if video is landscape and in simple mode
       if (data.height > data.width) {
         setVideoY(0);
         setVideoHeight(1920);
-        setFit('cover');
-      } else {
-        setVideoY(120);
-        setVideoHeight(860);
         setFit('cover');
       }
 
@@ -214,15 +425,6 @@ export function App() {
   const handleSelectSample = (sample) => {
     setVideoSrc(sample.url);
     setVideoMeta(sample);
-    if (sample.height > sample.width) {
-      setVideoY(0);
-      setVideoHeight(1920);
-      setFit('cover');
-    } else {
-      setVideoY(120);
-      setVideoHeight(860);
-      setFit('cover');
-    }
   };
 
   // Handle Asset Upload (Logo / Twibbon)
@@ -294,7 +496,6 @@ export function App() {
         logoEnabled,
         twibbonEnabled,
         textStroke,
-        template,
       };
 
       const res = await fetch('/api/render', {
@@ -413,7 +614,19 @@ export function App() {
       <div className="main-content">
         {/* Left Controls Column */}
         <aside className="controls-sidebar">
-          {/* 1. Video Picker */}
+          {/* 1. Template Preset Manager */}
+          <TemplateManager
+            templates={templates}
+            activeTemplateId={activeTemplateId}
+            onSelectTemplate={handleSelectTemplate}
+            onSaveNewTemplate={handleSaveNewTemplate}
+            onUpdateCurrentTemplate={handleUpdateCurrentTemplate}
+            onDeleteTemplate={handleDeleteTemplate}
+            isSimpleMode={isSimpleMode}
+            onToggleSimpleMode={setIsSimpleMode}
+          />
+
+          {/* 2. Video Picker (Always Visible) */}
           <VideoUploader
             videoSrc={videoSrc}
             videoMeta={videoMeta}
@@ -423,35 +636,7 @@ export function App() {
             isUploading={isUploading}
           />
 
-          {/* 2. Video Framing & Position */}
-          <VideoFitControls
-            fit={fit}
-            onChangeFit={setFit}
-            verticalAlign={verticalAlign}
-            onChangeVerticalAlign={setVerticalAlign}
-            videoY={videoY}
-            onChangeVideoY={setVideoY}
-            videoHeight={videoHeight}
-            onChangeVideoHeight={setVideoHeight}
-            videoScale={videoScale}
-            onChangeVideoScale={setVideoScale}
-          />
-
-          {/* 3. Gradient Fades & Blankspace Fill */}
-          <GradientControls
-            topGradientHeight={topGradientHeight}
-            onChangeTopGradientHeight={setTopGradientHeight}
-            bottomGradientHeight={bottomGradientHeight}
-            onChangeBottomGradientHeight={setBottomGradientHeight}
-            gradientColor={gradientColor}
-            onChangeGradientColor={setGradientColor}
-            gradientOpacity={gradientOpacity}
-            onChangeGradientOpacity={setGradientOpacity}
-            backdropBlur={backdropBlur}
-            onChangeBackdropBlur={setBackdropBlur}
-          />
-
-          {/* 4. Caption Editor */}
+          {/* 3. Caption Editor (Always Visible) */}
           <CaptionEditor
             caption={caption}
             onChangeCaption={setCaption}
@@ -466,35 +651,93 @@ export function App() {
             textStroke={textStroke}
             onChangeTextStroke={setTextStroke}
             captionY={captionY}
-            onChangeCaptionY={setCaptionY}
+            onChangeCaptionY={!isSimpleMode ? setCaptionY : undefined}
           />
 
-          {/* 5. Typography & Styling */}
-          <StyleControls
-            font={font}
-            onChangeFont={setFont}
-            fontSize={fontSize}
-            onChangeFontSize={setFontSize}
-            align={align}
-            onChangeAlign={setAlign}
-          />
+          {/* Advanced Styling & Positioning Cards (Shown in Full Customize Mode) */}
+          {!isSimpleMode && (
+            <>
+              {/* Video Framing & Position */}
+              <VideoFitControls
+                fit={fit}
+                onChangeFit={setFit}
+                verticalAlign={verticalAlign}
+                onChangeVerticalAlign={setVerticalAlign}
+                videoY={videoY}
+                onChangeVideoY={setVideoY}
+                videoHeight={videoHeight}
+                onChangeVideoHeight={setVideoHeight}
+                videoScale={videoScale}
+                onChangeVideoScale={setVideoScale}
+              />
 
-          {/* 6. Twibbon & Logo Overlays */}
-          <BrandingControls
-            twibbonEnabled={twibbonEnabled}
-            onToggleTwibbon={setTwibbonEnabled}
-            twibbonSrc={twibbonSrc}
-            logoEnabled={logoEnabled}
-            onToggleLogo={setLogoEnabled}
-            logoSrc={logoSrc}
-            onUploadAsset={handleUploadAsset}
-            logoWidth={logoWidth}
-            onChangeLogoWidth={setLogoWidth}
-            logoY={logoY}
-            onChangeLogoY={setLogoY}
-          />
+              {/* Gradient Fades & Blankspace Fill */}
+              <GradientControls
+                topGradientHeight={topGradientHeight}
+                onChangeTopGradientHeight={setTopGradientHeight}
+                bottomGradientHeight={bottomGradientHeight}
+                onChangeBottomGradientHeight={setBottomGradientHeight}
+                gradientColor={gradientColor}
+                onChangeGradientColor={setGradientColor}
+                gradientOpacity={gradientOpacity}
+                onChangeGradientOpacity={setGradientOpacity}
+                backdropBlur={backdropBlur}
+                onChangeBackdropBlur={setBackdropBlur}
+              />
 
-          {/* 7. Big Generate Action Button */}
+              {/* Typography & Styling */}
+              <StyleControls
+                font={font}
+                onChangeFont={setFont}
+                fontSize={fontSize}
+                onChangeFontSize={setFontSize}
+                align={align}
+                onChangeAlign={setAlign}
+              />
+
+              {/* Twibbon & Logo Overlays */}
+              <BrandingControls
+                twibbonEnabled={twibbonEnabled}
+                onToggleTwibbon={setTwibbonEnabled}
+                twibbonSrc={twibbonSrc}
+                logoEnabled={logoEnabled}
+                onToggleLogo={setLogoEnabled}
+                logoSrc={logoSrc}
+                onUploadAsset={handleUploadAsset}
+                logoWidth={logoWidth}
+                onChangeLogoWidth={setLogoWidth}
+                logoY={logoY}
+                onChangeLogoY={setLogoY}
+              />
+            </>
+          )}
+
+          {/* Quick Helper in Simple Mode */}
+          {isSimpleMode && (
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px dashed var(--border-color)',
+              borderRadius: '8px',
+              padding: '10px 14px',
+              fontSize: '12px',
+              color: '#9ca3af',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <span>Ingin ubah posisi video/logo/warna template?</span>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ padding: '4px 8px', fontSize: '11px' }}
+                onClick={() => setIsSimpleMode(false)}
+              >
+                <Sliders size={12} /> Buka Customizer
+              </button>
+            </div>
+          )}
+
+          {/* Big Generate Action Button */}
           <div style={{ marginTop: 'auto', paddingTop: '10px' }}>
             <button
               className="btn-primary"
@@ -538,7 +781,6 @@ export function App() {
             logoEnabled={logoEnabled}
             twibbonEnabled={twibbonEnabled}
             textStroke={textStroke}
-            template={template}
             durationSec={videoMeta?.duration || 4}
           />
         </main>
