@@ -44,6 +44,7 @@ export const BrandingLayer = ({
               width: '100%',
               height: '100%',
               objectFit: 'contain',
+              display: 'block',
             }}
           />
         </div>
@@ -65,9 +66,13 @@ export const BrandingLayer = ({
           <Img
             src={resolvedTwibbon}
             style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              display: 'block',
             }}
           />
         </div>

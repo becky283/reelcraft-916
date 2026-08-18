@@ -83,12 +83,16 @@ export const VideoLayer = ({
         src={resolvedSrc}
         volume={muted ? 0 : volume}
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100%',
-          objectFit: fit,
+          objectFit: fit || 'cover',
           objectPosition: objectPosition,
           transform: scale !== 1.0 ? `scale(${scale})` : undefined,
           transformOrigin: 'center center',
+          display: 'block',
         }}
       />
     </div>
