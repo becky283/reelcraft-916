@@ -10,10 +10,17 @@ const GRADIENT_COLOR_PRESETS = [
   { name: 'Dark Red', color: '#240808' },
 ];
 
+const BOTTOM_HEIGHT_PRESETS = [
+  { label: 'Subtle', height: 350 },
+  { label: 'Medium', height: 550 },
+  { label: 'High (Optimal)', height: 700 },
+  { label: 'Extra High', height: 950 },
+];
+
 export const GradientControls = ({
   topGradientHeight,
   onChangeTopGradientHeight,
-  bottomGradientHeight,
+  bottomGradientHeight = 650,
   onChangeBottomGradientHeight,
   gradientColor,
   onChangeGradientColor,
@@ -58,6 +65,65 @@ export const GradientControls = ({
         </div>
       </div>
 
+      {/* Bottom Gradient Fade Height (Primary) */}
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+          <label style={{ margin: 0, fontWeight: 700, color: '#e0e7ff' }}>
+            Bottom Gradient Fade Height (Naik/Turun)
+          </label>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: '#818cf8' }}>
+            {bottomGradientHeight}px
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <input
+            type="range"
+            min="0"
+            max="1200"
+            step="10"
+            value={bottomGradientHeight}
+            onChange={(e) => onChangeBottomGradientHeight(Number(e.target.value))}
+            style={{ flex: 1, accentColor: '#6366f1' }}
+          />
+          <button
+            type="button"
+            onClick={() => onChangeBottomGradientHeight(650)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#9ca3af',
+              fontSize: '11px',
+              cursor: 'pointer',
+              textDecoration: 'underline'
+            }}
+          >
+            Default (650px)
+          </button>
+        </div>
+
+        {/* Quick Height Preset Chips */}
+        <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
+          {BOTTOM_HEIGHT_PRESETS.map((p) => (
+            <button
+              key={p.height}
+              type="button"
+              onClick={() => onChangeBottomGradientHeight(p.height)}
+              style={{
+                background: bottomGradientHeight === p.height ? '#374151' : 'rgba(255,255,255,0.05)',
+                border: bottomGradientHeight === p.height ? '1px solid #818cf8' : '1px solid var(--border-color)',
+                color: bottomGradientHeight === p.height ? '#fff' : '#9ca3af',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                cursor: 'pointer',
+              }}
+            >
+              {p.label} ({p.height}px)
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Top Gradient Fade Height */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -70,7 +136,7 @@ export const GradientControls = ({
           <input
             type="range"
             min="0"
-            max="600"
+            max="800"
             step="10"
             value={topGradientHeight}
             onChange={(e) => onChangeTopGradientHeight(Number(e.target.value))}
@@ -89,41 +155,6 @@ export const GradientControls = ({
             }}
           >
             0px (Off)
-          </button>
-        </div>
-      </div>
-
-      {/* Bottom Gradient Fade Height */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-          <label style={{ margin: 0 }}>Bottom Gradient Fade Height</label>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
-            {bottomGradientHeight}px
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <input
-            type="range"
-            min="0"
-            max="800"
-            step="10"
-            value={bottomGradientHeight}
-            onChange={(e) => onChangeBottomGradientHeight(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#6366f1' }}
-          />
-          <button
-            type="button"
-            onClick={() => onChangeBottomGradientHeight(350)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#9ca3af',
-              fontSize: '11px',
-              cursor: 'pointer',
-              textDecoration: 'underline'
-            }}
-          >
-            Reset
           </button>
         </div>
       </div>

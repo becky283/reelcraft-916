@@ -12,7 +12,7 @@ import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film, ChevronDown, ChevronUp, Sliders } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v6';
+const STORAGE_KEY = 'auto_editor_user_settings_v7';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -52,7 +52,7 @@ export function App() {
 
   // Gradient Fades State
   const [topGradientHeight, setTopGradientHeight] = useState(saved.topGradientHeight ?? 0);
-  const [bottomGradientHeight, setBottomGradientHeight] = useState(saved.bottomGradientHeight ?? 380);
+  const [bottomGradientHeight, setBottomGradientHeight] = useState(saved.bottomGradientHeight ?? 650);
   const [gradientColor, setGradientColor] = useState(saved.gradientColor || '#000000');
   const [gradientOpacity, setGradientOpacity] = useState(saved.gradientOpacity ?? 1.0);
 
