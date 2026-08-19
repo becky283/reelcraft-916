@@ -12,7 +12,7 @@ import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film, ChevronDown, ChevronUp, Sliders } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v7';
+const STORAGE_KEY = 'auto_editor_user_settings_v8';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -64,7 +64,7 @@ export function App() {
   const [highlightColor, setHighlightColor] = useState(saved.highlightColor || '#FFD600');
   const [uppercase, setUppercase] = useState(saved.uppercase ?? true);
   const [textStroke, setTextStroke] = useState(saved.textStroke || 'none');
-  const [captionY, setCaptionY] = useState(saved.captionY ?? 1120);
+  const [captionY, setCaptionY] = useState(saved.captionY ?? 1400);
 
   // Style State
   const [font, setFont] = useState(saved.font || 'Montserrat ExtraBold');
@@ -189,7 +189,7 @@ export function App() {
       setDefaultColor(t.caption.defaultColor || '#FFFFFF');
       setHighlightColor(t.caption.highlightColor || '#FFD600');
       setAlign(t.caption.align || 'center');
-      setCaptionY(t.caption.y ?? 1120);
+      setCaptionY(t.caption.y ?? 1400);
       setTextStroke(t.caption.textStroke || 'none');
       if (t.caption.uppercase !== undefined) setUppercase(t.caption.uppercase);
     }
@@ -586,7 +586,7 @@ export function App() {
       setHighlightText('');
       setUppercase(true);
       setTextStroke('none');
-      setCaptionY(1120);
+      setCaptionY(1400);
       setVideoY(0);
       setVideoHeight(1920);
       setVideoScale(1.0);
@@ -594,7 +594,7 @@ export function App() {
       setVerticalAlign('center');
       setBackdropBlur(true);
       setTopGradientHeight(0);
-      setBottomGradientHeight(380);
+      setBottomGradientHeight(650);
       setGradientColor('#000000');
       setGradientOpacity(1.0);
       setTwibbonEnabled(true);

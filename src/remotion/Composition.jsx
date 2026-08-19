@@ -41,7 +41,7 @@ export const MainComposition = (props) => {
   const highlightColor = props.highlightColor || captionConfig.highlightColor || '#FFD600';
   const captionAlign = props.align || captionConfig.align || 'center';
   const captionX = props.captionX !== undefined ? props.captionX : (captionConfig.x ?? 100);
-  const captionY = props.captionY !== undefined ? props.captionY : (captionConfig.y ?? 1120);
+  const captionY = props.captionY !== undefined ? props.captionY : (captionConfig.y ?? 1400);
   const captionW = props.captionWidth !== undefined ? props.captionWidth : (captionConfig.width ?? 880);
   const captionMaxH = props.captionMaxHeight !== undefined ? props.captionMaxHeight : (captionConfig.maxHeight ?? 500);
   const textShadow = captionConfig.textShadow || '0px 4px 16px rgba(0,0,0,0.95), 0px 2px 6px rgba(0,0,0,0.9)';

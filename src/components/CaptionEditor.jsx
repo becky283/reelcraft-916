@@ -35,7 +35,7 @@ export const CaptionEditor = ({
   onToggleUppercase,
   textStroke,
   onChangeTextStroke,
-  captionY = 1120,
+  captionY = 1400,
   onChangeCaptionY,
 }) => {
   const displayText = uppercase ? caption.toUpperCase() : caption;
@@ -351,7 +351,7 @@ export const CaptionEditor = ({
             />
             <button
               type="button"
-              onClick={() => onChangeCaptionY(1120)}
+              onClick={() => onChangeCaptionY(1400)}
               style={{
                 background: 'transparent',
                 border: 'none',
@@ -361,7 +361,7 @@ export const CaptionEditor = ({
                 textDecoration: 'underline'
               }}
             >
-              Reset
+              Reset (1400px)
             </button>
           </div>
         </div>
