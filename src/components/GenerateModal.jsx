@@ -26,7 +26,7 @@ export const GenerateModal = ({
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(3, 4, 7, 0.82)',
+      background: 'rgba(10, 25, 47, 0.65)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
       display: 'flex',
@@ -36,15 +36,15 @@ export const GenerateModal = ({
       padding: '20px',
     }}>
       <div style={{
-        background: 'rgba(18, 22, 32, 0.85)',
+        background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(30px)',
         WebkitBackdropFilter: 'blur(30px)',
-        border: '1px solid var(--glass-border-hover)',
+        border: '1.5px solid rgba(217, 119, 6, 0.35)',
         borderRadius: 'var(--radius-xl)',
         padding: '28px',
         width: '100%',
         maxWidth: '460px',
-        boxShadow: 'var(--glass-specular), 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(99, 102, 241, 0.15)',
+        boxShadow: '0 30px 80px rgba(10, 25, 47, 0.35), 0 0 40px rgba(245, 158, 11, 0.2)',
         display: 'flex',
         flexDirection: 'column',
         gap: '18px',
@@ -58,15 +58,15 @@ export const GenerateModal = ({
               position: 'absolute',
               top: '16px',
               right: '16px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--glass-border)',
+              background: '#f1f5f9',
+              border: '1px solid #cbd5e1',
               borderRadius: '50%',
               width: '30px',
               height: '30px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--text-muted)',
+              color: '#64748b',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
@@ -82,14 +82,14 @@ export const GenerateModal = ({
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(99, 102, 241, 0.15)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
+              background: 'rgba(245, 158, 11, 0.15)',
+              border: '1.5px solid rgba(217, 119, 6, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#818cf8',
+              color: '#d97706',
               flexShrink: 0,
-              boxShadow: '0 0 20px rgba(99, 102, 241, 0.25)'
+              boxShadow: '0 0 20px rgba(217, 119, 6, 0.25)'
             }}>
               <Loader2 size={22} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
             </div>
@@ -100,14 +100,14 @@ export const GenerateModal = ({
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
+              background: 'rgba(5, 150, 105, 0.15)',
+              border: '1.5px solid rgba(5, 150, 105, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#34d399',
+              color: '#059669',
               flexShrink: 0,
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.25)'
+              boxShadow: '0 0 20px rgba(5, 150, 105, 0.25)'
             }}>
               <CheckCircle2 size={22} />
             </div>
@@ -118,12 +118,12 @@ export const GenerateModal = ({
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(239, 68, 68, 0.15)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'rgba(225, 29, 72, 0.15)',
+              border: '1.5px solid rgba(225, 29, 72, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#f87171',
+              color: '#e11d48',
               flexShrink: 0,
             }}>
               <AlertCircle size={22} />
@@ -131,12 +131,12 @@ export const GenerateModal = ({
           )}
 
           <div>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>
+            <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0a192f', letterSpacing: '-0.01em' }}>
               {isLoading && 'Mengekspor Video 9:16...'}
               {isFinished && 'Video Selesai Diekspor!'}
               {isError && 'Gagal Mengekspor'}
             </h3>
-            <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            <p style={{ fontSize: '12.5px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
               {message || (isLoading ? 'Memproses render Remotion MP4...' : '')}
             </p>
           </div>
@@ -149,27 +149,27 @@ export const GenerateModal = ({
               display: 'flex',
               justifyContent: 'space-between',
               fontSize: '11.5px',
-              fontWeight: 600,
-              color: 'var(--text-muted)',
+              fontWeight: 700,
+              color: '#0a192f',
               marginBottom: '6px'
             }}>
               <span>Progress Render</span>
-              <span style={{ color: '#a5b4fc', fontWeight: 700 }}>{Math.round((progress || 0) * 100)}%</span>
+              <span style={{ color: '#d97706', fontWeight: 800 }}>{Math.round((progress || 0) * 100)}%</span>
             </div>
             <div style={{
               width: '100%',
-              height: '6px',
-              background: 'rgba(255, 255, 255, 0.06)',
+              height: '8px',
+              background: '#e2e8f0',
               borderRadius: '999px',
               overflow: 'hidden',
             }}>
               <div style={{
                 height: '100%',
                 width: `${Math.min(100, Math.round((progress || 0) * 100))}%`,
-                background: 'linear-gradient(90deg, #6366f1, #ec4899)',
+                background: 'linear-gradient(90deg, #f59e0b, #d97706)',
                 borderRadius: '999px',
                 transition: 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: '0 0 12px rgba(99, 102, 241, 0.6)'
+                boxShadow: '0 0 12px rgba(217, 119, 6, 0.6)'
               }} />
             </div>
           </div>
@@ -178,28 +178,28 @@ export const GenerateModal = ({
         {/* Completed Output Info Card */}
         {isFinished && (
           <div style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid var(--glass-border)',
+            background: 'rgba(241, 245, 249, 0.95)',
+            border: '1px solid #cbd5e1',
             borderRadius: 'var(--radius-md)',
             padding: '12px 14px',
             display: 'flex',
             flexDirection: 'column',
             gap: '6px',
-            boxShadow: 'var(--glass-specular-subtle)'
+            boxShadow: '0 2px 8px rgba(10, 25, 47, 0.04)'
           }}>
-            <span style={{ fontSize: '10.5px', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
+            <span style={{ fontSize: '10.5px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 800 }}>
               Tersimpan di Folder Outputs:
             </span>
             <span style={{
               fontSize: '12.5px',
-              fontWeight: 600,
-              color: '#34d399',
+              fontWeight: 700,
+              color: '#059669',
               wordBreak: 'break-all',
               fontFamily: 'monospace'
             }}>
               {outputFilename}
             </span>
-            <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
+            <span style={{ fontSize: '11px', color: '#64748b' }}>
               1080 × 1920 (9:16) • H.264 + AAC Audio
             </span>
           </div>
@@ -208,12 +208,12 @@ export const GenerateModal = ({
         {/* Error Info Card */}
         {isError && (
           <div style={{
-            background: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid rgba(239, 68, 68, 0.25)',
+            background: 'rgba(225, 29, 72, 0.1)',
+            border: '1px solid rgba(225, 29, 72, 0.3)',
             borderRadius: 'var(--radius-md)',
             padding: '12px',
             fontSize: '12.5px',
-            color: '#fca5a5'
+            color: '#e11d48'
           }}>
             {error || 'Terjadi kesalahan saat rendering.'}
           </div>
@@ -235,7 +235,7 @@ export const GenerateModal = ({
                 style={{ flex: 1, padding: '10px 16px', fontSize: '13px' }}
                 onClick={onOpenFolder}
               >
-                <FolderOpen size={15} /> Buka Folder
+                <FolderOpen size={15} style={{ color: '#d97706' }} /> Buka Folder
               </button>
             </>
           )}

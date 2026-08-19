@@ -103,7 +103,7 @@ export const CaptionEditor = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Type size={15} />
+        <Type size={16} style={{ color: '#d97706' }} />
         <span>Caption & Word Highlighter</span>
       </div>
 
@@ -115,12 +115,12 @@ export const CaptionEditor = ({
             type="button"
             onClick={() => onToggleUppercase(!uppercase)}
             style={{
-              background: uppercase ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
-              border: uppercase ? '1px solid rgba(99, 102, 241, 0.35)' : '1px solid var(--glass-border)',
-              color: uppercase ? '#a5b4fc' : 'var(--text-muted)',
+              background: uppercase ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
+              border: uppercase ? '1px solid #d97706' : '1px solid #cbd5e1',
+              color: uppercase ? '#b45309' : '#64748b',
               fontSize: '10.5px',
-              fontWeight: 700,
-              padding: '2px 7px',
+              fontWeight: 800,
+              padding: '2px 8px',
               borderRadius: '5px',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
@@ -140,18 +140,18 @@ export const CaptionEditor = ({
       {/* 2. Interactive Word-Click Highlighter */}
       {availableWords.length > 0 && (
         <div style={{
-          background: 'rgba(99, 102, 241, 0.04)',
-          border: '1px solid rgba(99, 102, 241, 0.18)',
+          background: 'rgba(245, 158, 11, 0.06)',
+          border: '1.5px solid rgba(217, 119, 6, 0.35)',
           borderRadius: 'var(--radius-md)',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
           gap: '8px',
-          boxShadow: 'var(--glass-specular-subtle)'
+          boxShadow: '0 2px 10px rgba(217, 119, 6, 0.08)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#c7d2fe', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <MousePointerClick size={13} style={{ color: '#818cf8' }} />
+            <span style={{ fontSize: '12px', fontWeight: 800, color: '#0a192f', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <MousePointerClick size={14} style={{ color: '#d97706' }} />
               Klik Kata untuk Highlight Warna:
             </span>
             <div style={{ display: 'flex', gap: '8px' }}>
@@ -161,8 +161,9 @@ export const CaptionEditor = ({
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: 'var(--text-muted)',
+                  color: '#64748b',
                   fontSize: '11px',
+                  fontWeight: 600,
                   cursor: 'pointer',
                   textDecoration: 'underline'
                 }}
@@ -175,8 +176,9 @@ export const CaptionEditor = ({
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#818cf8',
+                  color: '#d97706',
                   fontSize: '11px',
+                  fontWeight: 700,
                   cursor: 'pointer',
                   textDecoration: 'underline'
                 }}
@@ -187,7 +189,7 @@ export const CaptionEditor = ({
           </div>
 
           {/* Clickable Word Pills */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '2px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '2px' }}>
             {availableWords.map((word, idx) => {
               const active = isWordHighlighted(word);
               return (
@@ -196,17 +198,17 @@ export const CaptionEditor = ({
                   type="button"
                   onClick={() => handleToggleWord(word)}
                   style={{
-                    background: active ? highlightColor : 'rgba(255, 255, 255, 0.04)',
-                    color: active ? '#000000' : '#e2e8f0',
-                    border: active ? `1px solid ${highlightColor}` : '1px solid var(--glass-border)',
-                    padding: '4px 9px',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    fontWeight: 700,
+                    background: active ? '#f59e0b' : '#ffffff',
+                    color: active ? '#0a192f' : '#334155',
+                    border: active ? '1.5px solid #d97706' : '1px solid #cbd5e1',
+                    padding: '5px 10px',
+                    borderRadius: '7px',
+                    fontSize: '12.5px',
+                    fontWeight: 800,
                     cursor: 'pointer',
                     transition: 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: active ? `0 2px 10px ${highlightColor}50` : 'none',
-                    transform: active ? 'scale(1.03)' : 'scale(1)',
+                    boxShadow: active ? '0 3px 12px rgba(217, 119, 6, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)',
+                    transform: active ? 'scale(1.04)' : 'scale(1)',
                   }}
                 >
                   {word}
@@ -215,7 +217,7 @@ export const CaptionEditor = ({
             })}
           </div>
 
-          <span style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '2px' }}>
+          <span style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
             💡 Klik kata mana saja yang ingin di-highlight warna (bisa acak / terpisah).
           </span>
         </div>
@@ -223,8 +225,8 @@ export const CaptionEditor = ({
 
       {/* 3. Optional Comma-Separated Highlight Input */}
       <div>
-        <label style={{ fontSize: '11.5px', color: 'var(--text-dim)' }}>
-          <Highlighter size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+        <label style={{ fontSize: '11.5px', color: '#64748b' }}>
+          <Highlighter size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px', color: '#d97706' }} />
           Atau Ketik Kata Highlight (pisahkan koma)
         </label>
         <input
@@ -241,30 +243,31 @@ export const CaptionEditor = ({
       {/* 4. Live Highlighted Text Preview */}
       {caption && (
         <div style={{
-          background: 'rgba(0, 0, 0, 0.35)',
-          border: '1px solid var(--glass-border)',
+          background: '#0a192f',
+          border: '1px solid #1e3a8a',
           borderRadius: 'var(--radius-sm)',
-          padding: '9px 12px',
-          fontSize: '13px',
+          padding: '10px 14px',
+          fontSize: '13.5px',
           fontWeight: 700,
           display: 'flex',
           flexWrap: 'wrap',
           gap: '4px',
           alignItems: 'center',
           lineHeight: 1.4,
+          boxShadow: '0 4px 14px rgba(10, 25, 47, 0.2)'
         }}>
-          <span style={{ fontSize: '10.5px', color: 'var(--text-dim)', width: '100%', marginBottom: '2px' }}>
-            Preview Highlight:
+          <span style={{ fontSize: '10.5px', color: '#94a3b8', width: '100%', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Preview Headline:
           </span>
           {previewSegments.map((seg, idx) => (
             <span
               key={idx}
               style={{
                 color: seg.isHighlight ? highlightColor : defaultColor,
-                backgroundColor: seg.isHighlight ? `${highlightColor}20` : 'transparent',
-                padding: seg.isHighlight ? '1px 5px' : '0',
+                backgroundColor: seg.isHighlight ? `${highlightColor}30` : 'transparent',
+                padding: seg.isHighlight ? '1px 6px' : '0',
                 borderRadius: '4px',
-                border: seg.isHighlight ? `1px solid ${highlightColor}50` : 'none',
+                border: seg.isHighlight ? `1px solid ${highlightColor}70` : 'none',
               }}
             >
               {seg.text}
@@ -331,10 +334,10 @@ export const CaptionEditor = ({
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
             <label style={{ margin: 0 }}>
-              <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+              <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px', color: '#d97706' }} />
               Posisi Vertikal Caption (Y)
             </label>
-            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
               {captionY}px
             </span>
           </div>
@@ -354,8 +357,9 @@ export const CaptionEditor = ({
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: 'var(--text-muted)',
+                color: '#64748b',
                 fontSize: '11px',
+                fontWeight: 600,
                 cursor: 'pointer',
                 textDecoration: 'underline'
               }}

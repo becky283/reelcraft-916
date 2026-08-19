@@ -52,7 +52,7 @@ export const VideoUploader = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Video size={15} />
+        <Video size={16} style={{ color: '#d97706' }} />
         <span>Video Source</span>
       </div>
 
@@ -74,24 +74,24 @@ export const VideoUploader = ({
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
           <div style={{
-            width: '38px',
-            height: '38px',
+            width: '40px',
+            height: '40px',
             borderRadius: '50%',
-            background: 'rgba(99, 102, 241, 0.12)',
-            border: '1px solid rgba(99, 102, 241, 0.25)',
+            background: 'rgba(245, 158, 11, 0.12)',
+            border: '1.5px solid rgba(217, 119, 6, 0.4)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#a5b4fc',
-            boxShadow: '0 2px 10px rgba(99, 102, 241, 0.2)'
+            color: '#d97706',
+            boxShadow: '0 2px 10px rgba(217, 119, 6, 0.15)'
           }}>
             <Upload size={18} />
           </div>
           <div>
-            <span style={{ fontSize: '13.5px', fontWeight: 600, color: '#f8fafc' }}>
+            <span style={{ fontSize: '13.5px', fontWeight: 700, color: '#0a192f' }}>
               {isUploading ? 'Uploading & Analyzing...' : 'Pilih Video dari Komputer'}
             </span>
-            <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            <p style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
               Drag and drop MP4, MOV, atau WEBM
             </p>
           </div>
@@ -101,20 +101,20 @@ export const VideoUploader = ({
       {/* Selected Video Metadata & Audio Controls */}
       {videoMeta && (
         <div style={{
-          background: 'rgba(255, 255, 255, 0.025)',
-          border: '1px solid var(--glass-border)',
+          background: 'rgba(255, 255, 255, 0.9)',
+          border: '1px solid #cbd5e1',
           borderRadius: 'var(--radius-md)',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
-          boxShadow: 'var(--glass-specular-subtle)'
+          boxShadow: '0 2px 8px rgba(10, 25, 47, 0.04)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{
-              fontSize: '12.5px',
-              fontWeight: 600,
-              color: '#f8fafc',
+              fontSize: '13px',
+              fontWeight: 700,
+              color: '#0a192f',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -138,7 +138,7 @@ export const VideoUploader = ({
               {formatDuration(videoMeta.duration)}
             </span>
             {videoMeta.hasAudio && (
-              <span className="badge" style={{ color: muted ? '#f87171' : '#34d399', borderColor: muted ? 'rgba(248, 113, 113, 0.3)' : 'rgba(52, 211, 153, 0.3)' }}>
+              <span className="badge" style={{ color: muted ? '#e11d48' : '#059669', borderColor: muted ? 'rgba(225, 29, 72, 0.3)' : 'rgba(5, 150, 105, 0.3)' }}>
                 {muted ? <VolumeX size={11} /> : <Music size={11} />}
                 {muted ? 'Muted' : 'Audio AAC'}
               </span>
@@ -147,7 +147,7 @@ export const VideoUploader = ({
 
           {/* Audio Sound Toggle & Volume Bar */}
           <div style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: '1px solid #e2e8f0',
             paddingTop: '9px',
             display: 'flex',
             flexDirection: 'column',
@@ -158,13 +158,13 @@ export const VideoUploader = ({
                 type="button"
                 onClick={() => onChangeMuted && onChangeMuted(!muted)}
                 style={{
-                  background: muted ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
-                  border: muted ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid rgba(16, 185, 129, 0.35)',
-                  color: muted ? '#f87171' : '#34d399',
+                  background: muted ? 'rgba(225, 29, 72, 0.1)' : 'rgba(10, 25, 47, 0.06)',
+                  border: muted ? '1px solid rgba(225, 29, 72, 0.4)' : '1px solid #cbd5e1',
+                  color: muted ? '#e11d48' : '#0a192f',
                   padding: '4px 9px',
                   borderRadius: '6px',
                   fontSize: '11.5px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -172,11 +172,11 @@ export const VideoUploader = ({
                   transition: 'all 0.15s ease',
                 }}
               >
-                {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                {muted ? <VolumeX size={13} /> : <Volume2 size={13} style={{ color: '#d97706' }} />}
                 <span>{muted ? 'Audio: DIMATIKAN (Hening)' : 'Audio: AKTIF'}</span>
               </button>
 
-              <span style={{ fontSize: '11px', color: muted ? '#f87171' : 'var(--text-dim)' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: muted ? '#e11d48' : '#64748b' }}>
                 {muted ? 'Tanpa Suara' : `${Math.round((volume ?? 1) * 100)}% Volume`}
               </span>
             </div>
@@ -184,7 +184,7 @@ export const VideoUploader = ({
             {/* Optional Volume Slider if not muted */}
             {!muted && onChangeVolume && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>Vol:</span>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#64748b' }}>Vol:</span>
                 <input
                   type="range"
                   min="0"
@@ -203,7 +203,7 @@ export const VideoUploader = ({
       {/* Quick Test Samples */}
       {samples.length > 0 && (
         <div>
-          <label style={{ fontSize: '11.5px', color: 'var(--text-dim)', marginBottom: '5px' }}>
+          <label style={{ fontSize: '11.5px', color: '#64748b', marginBottom: '5px' }}>
             Video Contoh:
           </label>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
@@ -214,14 +214,15 @@ export const VideoUploader = ({
                 className="btn-secondary"
                 onClick={() => onSelectSample(s)}
                 style={{
-                  background: videoSrc === s.url ? 'rgba(99, 102, 241, 0.18)' : undefined,
-                  borderColor: videoSrc === s.url ? 'rgba(99, 102, 241, 0.5)' : undefined,
-                  color: videoSrc === s.url ? '#fff' : undefined,
+                  background: videoSrc === s.url ? 'rgba(245, 158, 11, 0.12)' : undefined,
+                  borderColor: videoSrc === s.url ? '#d97706' : undefined,
+                  color: videoSrc === s.url ? '#b45309' : undefined,
                   padding: '4px 8px',
-                  fontSize: '11px',
+                  fontSize: '11.5px',
+                  fontWeight: 700,
                 }}
               >
-                <Sparkles size={11} />
+                <Sparkles size={11} style={{ color: '#d97706' }} />
                 {s.filename.replace('sample-', '').replace('.mp4', '')}
               </button>
             ))}

@@ -160,14 +160,15 @@ export const Preview = ({
         alignItems: 'center',
         gap: '6px',
         fontSize: '11.5px',
-        color: 'var(--text-muted)',
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid var(--glass-border)',
-        padding: '4px 10px',
+        fontWeight: 700,
+        color: '#0a192f',
+        background: 'rgba(255, 255, 255, 0.9)',
+        border: '1px solid #cbd5e1',
+        padding: '5px 12px',
         borderRadius: '999px',
-        boxShadow: 'var(--glass-specular-subtle)',
+        boxShadow: '0 2px 10px rgba(10, 25, 47, 0.08)',
       }}>
-        <Radio size={12} style={{ color: '#10b981' }} />
+        <Radio size={12} style={{ color: '#059669' }} />
         <span>Live 9:16 Studio Canvas (1080 × 1920)</span>
       </div>
     </div>

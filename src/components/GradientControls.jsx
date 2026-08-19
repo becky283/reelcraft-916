@@ -3,9 +3,9 @@ import { SunMedium, Sparkles } from 'lucide-react';
 
 const GRADIENT_COLOR_PRESETS = [
   { name: 'Pure Black', color: '#000000' },
+  { name: 'Deep Navy', color: '#0a192f' },
   { name: 'Golf Dark Green', color: '#041f0e' },
   { name: 'Dark Slate', color: '#0f172a' },
-  { name: 'Deep Navy', color: '#061224' },
   { name: 'Dark Purple', color: '#18072b' },
   { name: 'Dark Red', color: '#240808' },
 ];
@@ -32,7 +32,7 @@ export const GradientControls = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <SunMedium size={15} />
+        <SunMedium size={16} style={{ color: '#d97706' }} />
         <span>Gradient Fades & Blankspace</span>
       </div>
 
@@ -41,11 +41,11 @@ export const GradientControls = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: 'rgba(255, 255, 255, 0.025)',
+        background: 'rgba(255, 255, 255, 0.9)',
         padding: '10px 12px',
         borderRadius: 'var(--radius-md)',
-        border: '1px solid var(--glass-border)',
-        boxShadow: 'var(--glass-specular-subtle)',
+        border: '1px solid #cbd5e1',
+        boxShadow: '0 2px 8px rgba(10, 25, 47, 0.04)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <input
@@ -53,13 +53,13 @@ export const GradientControls = ({
             id="backdrop-toggle"
             checked={backdropBlur}
             onChange={(e) => onChangeBackdropBlur(e.target.checked)}
-            style={{ width: '15px', height: '15px', accentColor: '#6366f1', cursor: 'pointer' }}
+            style={{ width: '15px', height: '15px', accentColor: '#d97706', cursor: 'pointer' }}
           />
           <div>
-            <label htmlFor="backdrop-toggle" style={{ margin: 0, cursor: 'pointer', fontSize: '12.5px', fontWeight: 600 }}>
+            <label htmlFor="backdrop-toggle" style={{ margin: 0, cursor: 'pointer', fontSize: '12.5px', fontWeight: 700, color: '#0a192f' }}>
               Auto Blurred Mirror Background
             </label>
-            <span style={{ fontSize: '11px', color: 'var(--text-dim)', display: 'block' }}>
+            <span style={{ fontSize: '11px', color: '#64748b', display: 'block' }}>
               Menghilangkan blank space kosong di atas/bawah
             </span>
           </div>
@@ -69,10 +69,10 @@ export const GradientControls = ({
       {/* Bottom Gradient Fade Height (Primary) */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <label style={{ margin: 0, fontWeight: 600 }}>
+          <label style={{ margin: 0, fontWeight: 700, color: '#0a192f' }}>
             Bottom Gradient Height (Naik/Turun)
           </label>
-          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
             {bottomGradientHeight}px
           </span>
         </div>
@@ -92,8 +92,9 @@ export const GradientControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#64748b',
               fontSize: '11px',
+              fontWeight: 600,
               cursor: 'pointer',
               textDecoration: 'underline'
             }}
@@ -110,12 +111,13 @@ export const GradientControls = ({
               type="button"
               onClick={() => onChangeBottomGradientHeight(p.height)}
               style={{
-                background: bottomGradientHeight === p.height ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255,255,255,0.03)',
-                border: bottomGradientHeight === p.height ? '1px solid rgba(99, 102, 241, 0.4)' : '1px solid var(--glass-border)',
-                color: bottomGradientHeight === p.height ? '#fff' : 'var(--text-muted)',
+                background: bottomGradientHeight === p.height ? 'rgba(245, 158, 11, 0.15)' : '#ffffff',
+                border: bottomGradientHeight === p.height ? '1.5px solid #d97706' : '1px solid #cbd5e1',
+                color: bottomGradientHeight === p.height ? '#b45309' : '#334155',
                 padding: '2px 7px',
                 borderRadius: '5px',
                 fontSize: '11px',
+                fontWeight: 700,
                 cursor: 'pointer',
               }}
             >
@@ -128,8 +130,8 @@ export const GradientControls = ({
       {/* Top Gradient Fade Height */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <label style={{ margin: 0 }}>Top Gradient Height</label>
-          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+          <label style={{ margin: 0, fontWeight: 700, color: '#0a192f' }}>Top Gradient Height</label>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
             {topGradientHeight}px
           </span>
         </div>
@@ -149,8 +151,9 @@ export const GradientControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#64748b',
               fontSize: '11px',
+              fontWeight: 600,
               cursor: 'pointer',
               textDecoration: 'underline'
             }}
@@ -191,7 +194,7 @@ export const GradientControls = ({
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
             <label style={{ margin: 0 }}>Intensitas</label>
-            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
               {Math.round((gradientOpacity ?? 1) * 100)}%
             </span>
           </div>

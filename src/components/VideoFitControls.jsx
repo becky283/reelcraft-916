@@ -51,7 +51,7 @@ export const VideoFitControls = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Crop size={15} />
+        <Crop size={16} style={{ color: '#d97706' }} />
         <span>Video Framing & Position</span>
       </div>
 
@@ -65,14 +65,14 @@ export const VideoFitControls = ({
             style={{
               padding: '7px 10px',
               fontSize: '11.5px',
-              fontWeight: 600,
-              background: videoY === 0 && videoHeight === 1920 ? 'rgba(99, 102, 241, 0.2)' : undefined,
-              borderColor: videoY === 0 && videoHeight === 1920 ? 'rgba(99, 102, 241, 0.4)' : undefined,
-              color: videoY === 0 && videoHeight === 1920 ? '#fff' : undefined,
+              fontWeight: 700,
+              background: videoY === 0 && videoHeight === 1920 ? 'rgba(245, 158, 11, 0.15)' : undefined,
+              borderColor: videoY === 0 && videoHeight === 1920 ? '#d97706' : undefined,
+              color: videoY === 0 && videoHeight === 1920 ? '#b45309' : undefined,
             }}
             onClick={() => applyPreset('fullscreen')}
           >
-            <Smartphone size={13} /> Full 9:16 Screen
+            <Smartphone size={13} style={{ color: '#d97706' }} /> Full 9:16 Screen
           </button>
 
           <button
@@ -81,14 +81,14 @@ export const VideoFitControls = ({
             style={{
               padding: '7px 10px',
               fontSize: '11.5px',
-              fontWeight: 600,
-              background: videoY === 0 && videoHeight === 960 ? 'rgba(99, 102, 241, 0.2)' : undefined,
-              borderColor: videoY === 0 && videoHeight === 960 ? 'rgba(99, 102, 241, 0.4)' : undefined,
-              color: videoY === 0 && videoHeight === 960 ? '#fff' : undefined,
+              fontWeight: 700,
+              background: videoY === 0 && videoHeight === 960 ? 'rgba(245, 158, 11, 0.15)' : undefined,
+              borderColor: videoY === 0 && videoHeight === 960 ? '#d97706' : undefined,
+              color: videoY === 0 && videoHeight === 960 ? '#b45309' : undefined,
             }}
             onClick={() => applyPreset('top')}
           >
-            <LayoutTemplate size={13} /> Top Half
+            <LayoutTemplate size={13} style={{ color: '#d97706' }} /> Top Half
           </button>
 
           <button
@@ -97,10 +97,10 @@ export const VideoFitControls = ({
             style={{
               padding: '7px 10px',
               fontSize: '11.5px',
-              fontWeight: 600,
-              background: videoY === 120 && videoHeight === 860 ? 'rgba(99, 102, 241, 0.2)' : undefined,
-              borderColor: videoY === 120 && videoHeight === 860 ? 'rgba(99, 102, 241, 0.4)' : undefined,
-              color: videoY === 120 && videoHeight === 860 ? '#fff' : undefined,
+              fontWeight: 700,
+              background: videoY === 120 && videoHeight === 860 ? 'rgba(245, 158, 11, 0.15)' : undefined,
+              borderColor: videoY === 120 && videoHeight === 860 ? '#d97706' : undefined,
+              color: videoY === 120 && videoHeight === 860 ? '#b45309' : undefined,
             }}
             onClick={() => applyPreset('upper')}
           >
@@ -113,10 +113,10 @@ export const VideoFitControls = ({
             style={{
               padding: '7px 10px',
               fontSize: '11.5px',
-              fontWeight: 600,
-              background: videoY === 300 && videoHeight === 750 ? 'rgba(99, 102, 241, 0.2)' : undefined,
-              borderColor: videoY === 300 && videoHeight === 750 ? 'rgba(99, 102, 241, 0.4)' : undefined,
-              color: videoY === 300 && videoHeight === 750 ? '#fff' : undefined,
+              fontWeight: 700,
+              background: videoY === 300 && videoHeight === 750 ? 'rgba(245, 158, 11, 0.15)' : undefined,
+              borderColor: videoY === 300 && videoHeight === 750 ? '#d97706' : undefined,
+              color: videoY === 300 && videoHeight === 750 ? '#b45309' : undefined,
             }}
             onClick={() => applyPreset('center')}
           >
@@ -128,11 +128,11 @@ export const VideoFitControls = ({
       {/* Interactive Y-Position Slider */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <label style={{ margin: 0 }}>
-            <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+          <label style={{ margin: 0, fontWeight: 700, color: '#0a192f' }}>
+            <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px', color: '#d97706' }} />
             Posisi Vertikal Video (Y)
           </label>
-          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
             {videoY}px
           </span>
         </div>
@@ -152,8 +152,9 @@ export const VideoFitControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#64748b',
               fontSize: '11px',
+              fontWeight: 600,
               cursor: 'pointer',
               textDecoration: 'underline'
             }}
@@ -166,8 +167,8 @@ export const VideoFitControls = ({
       {/* Video Slot Height Slider */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <label style={{ margin: 0 }}>Tinggi Slot Video</label>
-          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+          <label style={{ margin: 0, fontWeight: 700, color: '#0a192f' }}>Tinggi Slot Video</label>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
             {videoHeight}px {videoHeight === 1920 ? '(Full Screen)' : ''}
           </span>
         </div>
@@ -187,8 +188,9 @@ export const VideoFitControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#64748b',
               fontSize: '11px',
+              fontWeight: 600,
               cursor: 'pointer',
               textDecoration: 'underline'
             }}
@@ -201,8 +203,8 @@ export const VideoFitControls = ({
       {/* Zoom / Scale Slider */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <label style={{ margin: 0 }}>Zoom / Scale</label>
-          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+          <label style={{ margin: 0, fontWeight: 700, color: '#0a192f' }}>Zoom / Scale</label>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
             {Math.round((videoScale || 1.0) * 100)}%
           </span>
         </div>
@@ -222,8 +224,9 @@ export const VideoFitControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#64748b',
               fontSize: '11px',
+              fontWeight: 600,
               cursor: 'pointer',
               textDecoration: 'underline'
             }}

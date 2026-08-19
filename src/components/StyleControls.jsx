@@ -13,7 +13,7 @@ export const StyleControls = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Sliders size={15} />
+        <Sliders size={16} style={{ color: '#d97706' }} />
         <span>Typography & Layout</span>
       </div>
 
@@ -23,7 +23,7 @@ export const StyleControls = ({
         <select
           value={font}
           onChange={(e) => onChangeFont(e.target.value)}
-          style={{ fontWeight: 600 }}
+          style={{ fontWeight: 700, color: '#0a192f' }}
         >
           {AVAILABLE_FONTS.map((f) => (
             <option key={f.id} value={f.id}>
@@ -31,7 +31,7 @@ export const StyleControls = ({
             </option>
           ))}
         </select>
-        <span style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '4px', display: 'block' }}>
+        <span style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', display: 'block' }}>
           File font kustom ada di folder <code>assets/fonts/</code>.
         </span>
       </div>
@@ -41,8 +41,8 @@ export const StyleControls = ({
         {/* Base Font Size */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-            <label style={{ margin: 0 }}>Ukuran Font</label>
-            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+            <label style={{ margin: 0, fontWeight: 700, color: '#0a192f' }}>Ukuran Font</label>
+            <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#b45309' }}>
               {fontSize}px
             </span>
           </div>
@@ -91,17 +91,17 @@ export const StyleControls = ({
 
       {/* Safe Area Auto-Shrink Guarantee Note */}
       <div style={{
-        background: 'rgba(99, 102, 241, 0.04)',
-        border: '1px solid rgba(99, 102, 241, 0.18)',
+        background: 'rgba(245, 158, 11, 0.08)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: 'var(--radius-sm)',
         padding: '9px 12px',
         display: 'flex',
         alignItems: 'flex-start',
         gap: '8px',
       }}>
-        <ShieldCheck size={14} style={{ color: '#818cf8', flexShrink: 0, marginTop: '2px' }} />
-        <span style={{ fontSize: '11px', color: '#c7d2fe', lineHeight: 1.4 }}>
-          <strong>Auto Safe-Area Guard:</strong> Jika teks caption panjang, font otomatis mengecil dinamis agar tidak terpotong tepi layar.
+        <ShieldCheck size={14} style={{ color: '#d97706', flexShrink: 0, marginTop: '2px' }} />
+        <span style={{ fontSize: '11.5px', color: '#0a192f', lineHeight: 1.4, fontWeight: 500 }}>
+          <strong style={{ color: '#b45309' }}>Auto Safe-Area Guard:</strong> Jika teks caption panjang, font otomatis mengecil dinamis agar tidak terpotong tepi layar.
         </span>
       </div>
     </div>
