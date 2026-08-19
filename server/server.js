@@ -415,6 +415,8 @@ app.post('/api/render', async (req, res) => {
     try {
       const {
         videoSrc,
+        muted = false,
+        volume = 1.0,
         videoY = 0,
         videoHeight = 1920,
         videoScale = 1.0,
@@ -500,6 +502,8 @@ app.post('/api/render', async (req, res) => {
 
       const inputProps = {
         videoSrc: resolvedVideoUrl,
+        muted: !!muted,
+        volume: muted ? 0 : (Number(volume) ?? 1.0),
         videoY: Number(videoY) || 0,
         videoHeight: Number(videoHeight) || 1920,
         videoScale: Number(videoScale) || 1.0,

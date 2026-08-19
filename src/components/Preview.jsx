@@ -6,6 +6,8 @@ import { Play, Eye } from 'lucide-react';
 
 export const Preview = ({
   videoSrc,
+  muted = false,
+  volume = 1.0,
   videoY = 0,
   videoHeight = 1920,
   videoScale = 1.0,
@@ -43,6 +45,8 @@ export const Preview = ({
 
   const inputProps = useMemo(() => ({
     videoSrc,
+    muted,
+    volume,
     videoY,
     videoHeight,
     videoScale,
@@ -75,6 +79,8 @@ export const Preview = ({
     template: template || defaultTemplate,
   }), [
     videoSrc,
+    muted,
+    volume,
     videoY,
     videoHeight,
     videoScale,

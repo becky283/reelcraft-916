@@ -82,6 +82,7 @@ export const VideoLayer = ({
       <Video
         src={resolvedSrc}
         volume={muted ? 0 : volume}
+        muted={muted}
         style={{
           position: 'absolute',
           top: 0,

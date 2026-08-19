@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Upload, Video, CheckCircle2, Music, AlertCircle, Sparkles } from 'lucide-react';
+import { Upload, Video, CheckCircle2, Music, AlertCircle, Sparkles, Volume2, VolumeX } from 'lucide-react';
 
 export const VideoUploader = ({
   videoSrc,
@@ -7,7 +7,11 @@ export const VideoUploader = ({
   samples = [],
   onSelectVideo,
   onSelectSample,
-  isUploading
+  isUploading,
+  muted = false,
+  onChangeMuted,
+  volume = 1.0,
+  onChangeVolume,
 }) => {
   const fileInputRef = useRef(null);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -92,7 +96,7 @@ export const VideoUploader = ({
         </div>
       </div>
 
-      {/* Selected Video Metadata Details */}
+      {/* Selected Video Metadata & Audio Controls */}
       {videoMeta && (
         <div style={{
           background: 'rgba(31, 36, 45, 0.6)',
@@ -101,7 +105,7 @@ export const VideoUploader = ({
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '8px'
+          gap: '10px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{
@@ -131,9 +135,65 @@ export const VideoUploader = ({
               {formatDuration(videoMeta.duration)}
             </span>
             {videoMeta.hasAudio && (
-              <span className="badge" style={{ color: '#34d399', borderColor: 'rgba(52, 211, 153, 0.3)' }}>
-                <Music size={11} /> Audio (AAC)
+              <span className="badge" style={{ color: muted ? '#f87171' : '#34d399', borderColor: muted ? 'rgba(248, 113, 113, 0.3)' : 'rgba(52, 211, 153, 0.3)' }}>
+                {muted ? <VolumeX size={11} /> : <Music size={11} />}
+                {muted ? 'Audio Muted' : 'Audio (AAC)'}
               </span>
+            )}
+          </div>
+
+          {/* Audio Sound Toggle & Volume Bar */}
+          <div style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            paddingTop: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  type="button"
+                  onClick={() => onChangeMuted && onChangeMuted(!muted)}
+                  style={{
+                    background: muted ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                    border: muted ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(16, 185, 129, 0.4)',
+                    color: muted ? '#f87171' : '#34d399',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                  <span>{muted ? 'Audio Video: DIMATIKAN (Muted)' : 'Audio Video: AKTIF (Bersuara)'}</span>
+                </button>
+              </div>
+
+              <span style={{ fontSize: '11px', color: muted ? '#f87171' : '#9ca3af' }}>
+                {muted ? 'Hening / Tanpa Suara' : `${Math.round((volume ?? 1) * 100)}% Volume`}
+              </span>
+            </div>
+
+            {/* Optional Volume Slider if not muted */}
+            {!muted && onChangeVolume && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                <span style={{ fontSize: '11px', color: '#9ca3af' }}>Vol:</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={volume ?? 1}
+                  onChange={(e) => onChangeVolume(Number(e.target.value))}
+                  style={{ flex: 1, accentColor: '#6366f1' }}
+                />
+              </div>
             )}
           </div>
         </div>

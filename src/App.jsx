@@ -12,7 +12,7 @@ import { GenerateModal } from './components/GenerateModal';
 import { Play, Sparkles, FolderOpen, Film, ChevronDown, ChevronUp, Sliders } from 'lucide-react';
 import defaultTemplate from '../templates/main-template.json';
 
-const STORAGE_KEY = 'auto_editor_user_settings_v8';
+const STORAGE_KEY = 'auto_editor_user_settings_v9';
 
 export function App() {
   // Load saved settings from localStorage if available
@@ -41,6 +41,10 @@ export function App() {
   });
   const [samples, setSamples] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+
+  // Audio State (Mute Audio sound toggle & Volume)
+  const [muted, setMuted] = useState(saved.muted ?? false);
+  const [volume, setVolume] = useState(saved.volume ?? 1.0);
 
   // Video Fit & Position State
   const [videoY, setVideoY] = useState(saved.videoY ?? 0);
@@ -98,6 +102,8 @@ export function App() {
       const currentSettings = {
         activeTemplateId,
         isSimpleMode,
+        muted,
+        volume,
         font,
         fontSize,
         align,
@@ -127,7 +133,7 @@ export function App() {
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
     } catch (e) {}
-  }, [activeTemplateId, isSimpleMode, font, fontSize, align, defaultColor, highlightColor, highlightWords, highlightText, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, twibbonSrc, logoEnabled, logoSrc, logoWidth, logoY]);
+  }, [activeTemplateId, isSimpleMode, muted, volume, font, fontSize, align, defaultColor, highlightColor, highlightWords, highlightText, uppercase, textStroke, captionY, fit, verticalAlign, videoY, videoHeight, videoScale, backdropBlur, topGradientHeight, bottomGradientHeight, gradientColor, gradientOpacity, twibbonEnabled, twibbonSrc, logoEnabled, logoSrc, logoWidth, logoY]);
 
   // Fetch initial backend data (templates, samples, outputs)
   const refreshData = useCallback(async () => {
@@ -177,9 +183,13 @@ export function App() {
       setVerticalAlign(t.video.verticalAlign || 'center');
       setBackdropBlur(t.video.backdropBlur ?? true);
     }
+    if (t.audio) {
+      setMuted(t.audio.muted ?? false);
+      setVolume(t.audio.volume ?? 1.0);
+    }
     if (t.gradient) {
       setTopGradientHeight(t.gradient.topHeight ?? 0);
-      setBottomGradientHeight(t.gradient.bottomHeight ?? 380);
+      setBottomGradientHeight(t.gradient.bottomHeight ?? 650);
       setGradientColor(t.gradient.color || '#000000');
       setGradientOpacity(t.gradient.opacity ?? 1.0);
     }
@@ -236,6 +246,10 @@ export function App() {
           fit,
           verticalAlign,
           backdropBlur,
+        },
+        audio: {
+          muted,
+          volume,
         },
         gradient: {
           topHeight: topGradientHeight,
@@ -307,6 +321,10 @@ export function App() {
           fit,
           verticalAlign,
           backdropBlur,
+        },
+        audio: {
+          muted,
+          volume,
         },
         gradient: {
           topHeight: topGradientHeight,
@@ -470,6 +488,8 @@ export function App() {
     try {
       const payload = {
         videoSrc,
+        muted,
+        volume: muted ? 0 : volume,
         videoY,
         videoHeight,
         videoScale,
@@ -587,6 +607,8 @@ export function App() {
       setUppercase(true);
       setTextStroke('none');
       setCaptionY(1400);
+      setMuted(false);
+      setVolume(1.0);
       setVideoY(0);
       setVideoHeight(1920);
       setVideoScale(1.0);
@@ -629,7 +651,7 @@ export function App() {
             onToggleSimpleMode={setIsSimpleMode}
           />
 
-          {/* 2. Video Picker (Always Visible) */}
+          {/* 2. Video Picker & Audio Control (Always Visible) */}
           <VideoUploader
             videoSrc={videoSrc}
             videoMeta={videoMeta}
@@ -637,6 +659,10 @@ export function App() {
             onSelectVideo={handleSelectVideo}
             onSelectSample={handleSelectSample}
             isUploading={isUploading}
+            muted={muted}
+            onChangeMuted={setMuted}
+            volume={volume}
+            onChangeVolume={setVolume}
           />
 
           {/* 3. Caption Editor with Click-to-Highlight (Always Visible) */}
@@ -760,6 +786,8 @@ export function App() {
         <main className="preview-area">
           <Preview
             videoSrc={videoSrc}
+            muted={muted}
+            volume={volume}
             videoY={videoY}
             videoHeight={videoHeight}
             videoScale={videoScale}
