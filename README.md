@@ -1,6 +1,24 @@
-# Auto Editor 9:16 (TikTok & Reels Automation)
+# 🎬 ReelCraft (9:16 Auto Video Studio)
 
-A personal, local-first automatic video editor built for creating **9:16 (1080 × 1920)** TikTok and Instagram Reels videos with fixed branding templates, dynamic headlines, custom fonts, phrase highlighting, and original audio preservation.
+A personal, local-first automatic video editor built for creating **9:16 (1080 × 1920)** TikTok and Instagram Reels videos with fixed branding templates, interactive phrase highlighting, cinematic scrim gradients, dynamic font scaling, and instant MP4 export.
+
+[![GitHub Repository](https://img.shields.io/badge/GitHub-becky283%2Freelcraft--916-blue?logo=github)](https://github.com/becky283/reelcraft-916)
+[![Remotion 4.0](https://img.shields.io/badge/Remotion-4.0-red?logo=remotion)](https://remotion.dev)
+[![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev)
+
+---
+
+## ✨ Features
+
+* **⚡ 2-Step Simple Mode**: Minimalist daily workflow: *Upload Video → Click Words to Highlight → Generate MP4*.
+* **🖱️ Interactive Word-Click Highlighter**: Click individual words directly on-screen to toggle bright highlight colors (supports multiple non-contiguous words).
+* **🎨 Cinematic Scrim Gradients**: 14-stop cubic-cosine smooth easing curves that eliminate harsh cuts and blend video edges naturally.
+* **🏷️ Branding & Overlays**: Proportional logo sizing slider (`60px` – `600px`), vertical positioning, 1-click twibbon & logo removal/replacement.
+* **🔇 Audio Controls**: 1-click video mute (silence) switch and volume percentage slider.
+* **💾 Preset Template System**: Save, update, and switch between named layout styles with persistent local storage.
+* **📱 Real-time 9:16 Preview**: Live scrubbing and synchronized preview in a smartphone frame mockup.
+* **🚀 Local-first Fast Export**: High-performance H.264 rendering with AAC audio preservation via bundled FFmpeg.
 
 ---
 
@@ -8,15 +26,14 @@ A personal, local-first automatic video editor built for creating **9:16 (1080 �
 
 ### 1. Requirements
 * **Node.js**: v18+ (tested on Node v25.9.0)
-* **npm** or **pnpm**
 * **FFmpeg**: Bundled automatically via `ffmpeg-static` (no manual system PATH installation needed).
 
-### 2. Install
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Run Development Server (UI + API)
+### 3. Run Development Studio (UI + Backend)
 ```bash
 npm run dev
 ```
@@ -24,67 +41,14 @@ Open **`http://localhost:5173`** in your browser.
 
 ---
 
-## 🎬 Workflow
-
-1. **Choose Video**: Select any video (Landscape 16:9, Portrait 9:16, or Square 1:1) from your computer or choose a built-in test sample.
-2. **Write Caption**: Enter headline text and optionally specify words/phrases to highlight.
-3. **Customize Styling**: Pick font family, font size, default text color, highlight color, and text stroke.
-4. **Framing & Fit**: Choose between **Crop to Fill (Cover)** or **Fit in Slot (Contain)** and adjust vertical alignment (Top, Center, Bottom).
-5. **Live Preview**: Play, scrub, and inspect the composition inside the 9:16 interactive player mockup.
-6. **Generate MP4**: Click **Generate 1080×1920 MP4** to render the final video. Click **Play Video** or **Open Output Folder** directly from the UI when finished.
-
----
-
-## 🎨 Asset Configuration
-
-Place your custom branding assets in the following directories:
-
-| Asset | Location | Recommended Specs |
-| :--- | :--- | :--- |
-| **Twibbon / Frame** | `assets/twibbon.png` | Transparent PNG, 1080 × 1920 px |
-| **Brand Logo** | `assets/logo.png` | Transparent PNG / SVG, ~240 × 80 px |
-| **Custom Fonts** | `assets/fonts/` | `.ttf` or `.otf` font files |
-
-> *Note: Placeholder assets and popular fonts (Montserrat ExtraBold, Anton, Bebas Neue, Inter Bold) are pre-bundled so the app works immediately out-of-the-box.*
-
----
-
-## ⚙️ Template Customization
-
-Layout dimensions, coordinates, and safe areas are configured in:
-
-`templates/main-template.json`
-
-```json
-{
-  "canvas": { "width": 1080, "height": 1920, "fps": 30 },
-  "video": { "x": 0, "y": 200, "width": 1080, "height": 700, "fit": "cover" },
-  "caption": {
-    "x": 100,
-    "y": 1120,
-    "width": 880,
-    "maxHeight": 500,
-    "font": "Montserrat ExtraBold",
-    "fontSize": 64,
-    "defaultColor": "#FFFFFF",
-    "highlightColor": "#FFD600"
-  },
-  "logo": { "x": 420, "y": 980, "width": 240, "height": 80, "path": "assets/logo.png" },
-  "twibbon": { "path": "assets/twibbon.png" }
-}
-```
-
----
-
 ## 📁 Output Exports
 
 Rendered video files are saved to:
-
 `outputs/video-YYYY-MM-DD-HHmmss.mp4`
 
-All outputs are encoded in:
-* **Resolution**: 1080 × 1920 (9:16)
-* **Video Codec**: H.264 (`yuv420p` compatible)
+All outputs are exported in:
+* **Resolution**: 1080 × 1920 (9:16 portrait)
+* **Video Codec**: H.264 (`yuv420p` compatible for TikTok & Instagram Reels)
 * **Audio Codec**: AAC (original input audio synchronized)
 
 ---
@@ -96,3 +60,8 @@ All outputs are encoded in:
 * `npm run test-render`: Runs a Phase 1 render verification pipeline.
 * `npm test`: Runs automated edge case tests across 16:9, 9:16, 1:1 videos with ffprobe metadata verification.
 * `npm run build`: Builds the production Vite bundle in `dist/`.
+
+---
+
+## 📄 License
+ISC License. Built with ❤️ for personal content creation.

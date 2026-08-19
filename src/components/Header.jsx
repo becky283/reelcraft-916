@@ -6,8 +6,8 @@ export const Header = ({ onOpenOutputFolder, onResetSettings, outputsCount = 0 }
     <header className="app-header">
       <div className="logo-badge">
         <div style={{
-          width: '36px',
-          height: '36px',
+          width: '38px',
+          height: '38px',
           borderRadius: '10px',
           background: 'linear-gradient(135deg, #6366f1, #ec4899)',
           display: 'flex',
@@ -20,10 +20,10 @@ export const Header = ({ onOpenOutputFolder, onResetSettings, outputsCount = 0 }
         </div>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h1 style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
-              Auto Editor
+            <h1 style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              ReelCraft
             </h1>
-            <span className="badge-916">9:16 REELS / TIKTOK</span>
+            <span className="badge-916">9:16 STUDIO</span>
           </div>
           <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '1px' }}>
             Personal Local-First Video Automation (1080 × 1920)

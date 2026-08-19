@@ -1,7 +1,7 @@
 {
-  "name": "auto-editor-916",
+  "name": "reelcraft-916",
   "version": "1.0.0",
-  "description": "Personal local-first automatic video editor for 9:16 TikTok / Instagram Reels",
+  "description": "ReelCraft - Personal local-first automatic video studio for 9:16 TikTok / Instagram Reels",
   "type": "module",
   "scripts": {
     "dev": "concurrently -n \"API,VITE\" -c \"blue,magenta\" \"node server/server.js\" \"vite\"",
