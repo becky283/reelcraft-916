@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Player } from '@remotion/player';
 import { MainComposition } from '../remotion/Composition';
 import defaultTemplate from '../../templates/main-template.json';
-import { Eye, Radio } from 'lucide-react';
+import { Radio, Wifi, Battery } from 'lucide-react';
 
 export const Preview = ({
   videoSrc,
@@ -121,37 +121,63 @@ export const Preview = ({
       justifyContent: 'center',
       width: '100%',
       height: '100%',
-      gap: '14px',
+      gap: '12px',
       position: 'relative',
       zIndex: 10,
     }}>
-      {/* Phone Mockup Frame */}
-      <div
-        className="phone-mockup"
-        style={{
-          width: '340px',
-          height: '604px', // 9:16 ratio
-          maxHeight: 'calc(100vh - 160px)',
-          aspectRatio: '9 / 16',
-        }}
-      >
-        <Player
-          component={MainComposition}
-          inputProps={inputProps}
-          durationInFrames={durationInFrames}
-          fps={fps}
-          compositionWidth={1080}
-          compositionHeight={1920}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-          controls
-          loop
-          autoPlay={false}
-          showVolumeControls
-          acknowledgeRemotionLicense
-        />
+      {/* Smartphone Device Wrapper with Outer Buttons & Chassis */}
+      <div className="phone-device-wrapper">
+        {/* Hardware Side Buttons */}
+        <div className="phone-btn phone-btn-action" />
+        <div className="phone-btn phone-btn-volup" />
+        <div className="phone-btn phone-btn-voldown" />
+        <div className="phone-btn phone-btn-power" />
+
+        {/* Main Phone Casing */}
+        <div className="phone-mockup">
+          {/* Top Speaker Ear-piece */}
+          <div className="phone-speaker-slit" />
+
+          {/* Dynamic Island Pill */}
+          <div className="phone-dynamic-island">
+            <div className="phone-camera-lens" />
+            <div className="phone-sensor-dot" />
+          </div>
+
+          {/* iOS Status Bar Overlay */}
+          <div className="phone-status-bar">
+            <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '-0.02em' }}>9:41</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Wifi size={11} strokeWidth={2.5} />
+              <span style={{ fontSize: '9px', fontWeight: 800 }}>5G</span>
+              <Battery size={13} strokeWidth={2.5} />
+            </div>
+          </div>
+
+          {/* Video Player Screen Content */}
+          <div className="phone-screen-content">
+            <Player
+              component={MainComposition}
+              inputProps={inputProps}
+              durationInFrames={durationInFrames}
+              fps={fps}
+              compositionWidth={1080}
+              compositionHeight={1920}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              controls
+              loop
+              autoPlay={false}
+              showVolumeControls
+              acknowledgeRemotionLicense
+            />
+          </div>
+
+          {/* Bottom Home Indicator Bar */}
+          <div className="phone-home-indicator" />
+        </div>
       </div>
 
       {/* Live Badge */}
@@ -164,12 +190,12 @@ export const Preview = ({
         color: '#0a192f',
         background: 'rgba(255, 255, 255, 0.9)',
         border: '1px solid #cbd5e1',
-        padding: '5px 12px',
+        padding: '4px 12px',
         borderRadius: '999px',
         boxShadow: '0 2px 10px rgba(10, 25, 47, 0.08)',
       }}>
         <Radio size={12} style={{ color: '#059669' }} />
-        <span>Live 9:16 Studio Canvas (1080 × 1920)</span>
+        <span>Live 9:16 iPhone Studio Canvas (1080 × 1920)</span>
       </div>
     </div>
   );

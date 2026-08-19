@@ -428,21 +428,171 @@ input[type="range"]::-webkit-slider-thumb:hover {
   box-shadow: 0 3px 10px rgba(217, 119, 6, 0.15);
 }
 
-/* Deep Navy & Gold Phone Mockup */
+/* ==========================================================================
+   Realistic Smartphone Device Mockup (iPhone Pro Titanium & Gold Bezel)
+   ========================================================================== */
+.phone-device-wrapper {
+  position: relative;
+  display: inline-block;
+  padding: 0 4px;
+}
+
+/* External Hardware Buttons */
+.phone-btn {
+  position: absolute;
+  background: linear-gradient(to right, #0a192f, #1e293b);
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  border-radius: 3px;
+  z-index: 5;
+}
+
+.phone-btn-action {
+  left: 0px;
+  top: 95px;
+  width: 4px;
+  height: 24px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.phone-btn-volup {
+  left: 0px;
+  top: 135px;
+  width: 4px;
+  height: 44px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.phone-btn-voldown {
+  left: 0px;
+  top: 190px;
+  width: 4px;
+  height: 44px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.phone-btn-power {
+  right: 0px;
+  top: 145px;
+  width: 4px;
+  height: 60px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+/* Main Phone Chassis Body */
 .phone-mockup {
   position: relative;
   background: #000000;
-  border-radius: 36px;
-  border: 3.5px solid var(--navy-primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4),
-              0 25px 70px rgba(10, 25, 47, 0.25),
-              0 0 0 1px rgba(217, 119, 6, 0.3),
-              0 0 40px rgba(245, 158, 11, 0.15);
+  border-radius: 46px;
+  border: 10px solid #0a192f;
+  box-shadow: inset 0 0 0 2px rgba(217, 119, 6, 0.5),
+              inset 0 0 0 3.5px #000000,
+              0 30px 80px rgba(10, 25, 47, 0.3),
+              0 0 0 1.5px rgba(255, 255, 255, 0.8),
+              0 0 35px rgba(245, 158, 11, 0.15);
+  width: 340px;
+  height: 620px;
+  max-height: calc(100vh - 160px);
+  aspect-ratio: 9 / 16;
   overflow: hidden;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   z-index: 10;
+}
+
+/* Micro-Speaker Slit */
+.phone-speaker-slit {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 3px;
+  background: #1e293b;
+  border-radius: 999px;
+  z-index: 45;
+  pointer-events: none;
+}
+
+/* Dynamic Island Pill */
+.phone-dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92px;
+  height: 23px;
+  background: #000000;
+  border-radius: 999px;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 9px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.phone-camera-lens {
+  width: 9.5px;
+  height: 9.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1e3a8a, #030712);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 0 2px rgba(99, 102, 241, 0.8);
+}
+
+.phone-sensor-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #030712;
+  margin-left: 6px;
+}
+
+/* iOS Status Bar Overlay */
+.phone-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 22px 0 22px;
+  color: #ffffff;
+  z-index: 40;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Inner Screen Content Holder */
+.phone-screen-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 36px;
+}
+
+/* Bottom iOS Home Indicator Bar */
+.phone-home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Light Glass Dropzone */
