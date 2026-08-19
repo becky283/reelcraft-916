@@ -26,7 +26,7 @@ export const MainComposition = (props) => {
   // Gradient Fade Properties
   const gradientConfig = template.gradient || {};
   const topGradientHeight = props.topGradientHeight !== undefined ? props.topGradientHeight : (gradientConfig.topHeight ?? 0);
-  const bottomGradientHeight = props.bottomGradientHeight !== undefined ? props.bottomGradientHeight : (gradientConfig.bottomHeight ?? 350);
+  const bottomGradientHeight = props.bottomGradientHeight !== undefined ? props.bottomGradientHeight : (gradientConfig.bottomHeight ?? 650);
   const gradientColor = props.gradientColor || gradientConfig.color || '#000000';
   const gradientOpacity = props.gradientOpacity !== undefined ? props.gradientOpacity : (gradientConfig.opacity ?? 1.0);
 

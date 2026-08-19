@@ -50,7 +50,7 @@ function createSmoothGradient(direction, color, maxOpacity = 1.0) {
 
 export const GradientLayer = ({
   topHeight = 0, // in px (0 - 600)
-  bottomHeight = 350, // in px (0 - 800)
+  bottomHeight = 650, // in px (0 - 1200)
   color = '#000000',
   opacity = 1.0,
 }) => {

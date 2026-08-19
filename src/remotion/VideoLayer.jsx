@@ -32,6 +32,7 @@ export const VideoLayer = ({
   verticalAlign = 'center', // 'top' | 'center' | 'bottom'
   muted = false,
   volume = 1.0,
+  backdropBlur = false,
 }) => {
   const resolvedSrc = resolveMediaSrc(src);
 
@@ -67,35 +68,73 @@ export const VideoLayer = ({
   if (verticalAlign === 'bottom') objectPosition = 'center bottom';
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left: `${x}px`,
-        top: `${y}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-        overflow: 'hidden',
-        backgroundColor: '#000000',
-        zIndex: 10,
-      }}
-    >
-      <Video
-        src={resolvedSrc}
-        volume={muted ? 0 : volume}
-        muted={muted}
+    <>
+      {/* Optional Blurred Mirror Backdrop Fill */}
+      {backdropBlur && (
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '1080px',
+            height: '1920px',
+            overflow: 'hidden',
+            backgroundColor: '#000000',
+            zIndex: 5,
+            pointerEvents: 'none',
+          }}
+        >
+          <Video
+            src={resolvedSrc}
+            volume={0}
+            muted={true}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              filter: 'blur(36px) brightness(0.5)',
+              transform: 'scale(1.2)',
+              transformOrigin: 'center center',
+              display: 'block',
+            }}
+          />
+        </div>
+      )}
+
+      {/* Main Video Slot */}
+      <div
         style={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: fit || 'cover',
-          objectPosition: objectPosition,
-          transform: scale !== 1.0 ? `scale(${scale})` : undefined,
-          transformOrigin: 'center center',
-          display: 'block',
+          left: `${x}px`,
+          top: `${y}px`,
+          width: `${width}px`,
+          height: `${height}px`,
+          overflow: 'hidden',
+          backgroundColor: backdropBlur ? 'transparent' : '#000000',
+          zIndex: 10,
         }}
-      />
-    </div>
+      >
+        <Video
+          src={resolvedSrc}
+          volume={muted ? 0 : volume}
+          muted={muted}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: fit || 'cover',
+            objectPosition: objectPosition,
+            transform: scale !== 1.0 ? `scale(${scale})` : undefined,
+            transformOrigin: 'center center',
+            display: 'block',
+          }}
+        />
+      </div>
+    </>
   );
 };

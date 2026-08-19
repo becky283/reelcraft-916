@@ -475,7 +475,12 @@ export function App() {
   // Trigger Video Render
   const handleGenerateVideo = async () => {
     if (!videoSrc) {
-      alert('Please choose a video first.');
+      alert('Pilih video terlebih dahulu.');
+      return;
+    }
+
+    if (videoSrc.startsWith('blob:')) {
+      alert('Video masih dalam proses upload ke server lokal. Harap tunggu sesaat.');
       return;
     }
 
@@ -512,6 +517,7 @@ export function App() {
         captionY,
         logoY,
         logoWidth,
+        logoX: Math.round((1080 - logoWidth) / 2),
         logoSrc,
         twibbonSrc,
         logoEnabled,

@@ -122,6 +122,8 @@ async function main() {
       defaultColor,
       highlightColor,
       align: 'center',
+      captionY: 1400,
+      bottomGradientHeight: 650,
       fit,
       verticalAlign,
       logoSrc: `http://127.0.0.1:${PORT}/assets/logo.png`,
