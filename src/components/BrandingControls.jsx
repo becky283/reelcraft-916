@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Layers, Image, UploadCloud, MoveVertical, Maximize2, MoveHorizontal } from 'lucide-react';
+import { Layers, Image, UploadCloud, MoveVertical, Maximize2, Trash2, CheckCircle2, XCircle } from 'lucide-react';
 
 const LOGO_SIZE_PRESETS = [
   { label: 'Small', width: 140 },
@@ -12,9 +12,11 @@ export const BrandingControls = ({
   twibbonEnabled,
   onToggleTwibbon,
   twibbonSrc,
+  onRemoveTwibbon,
   logoEnabled,
   onToggleLogo,
   logoSrc,
+  onRemoveLogo,
   onUploadAsset,
   logoWidth = 240,
   onChangeLogoWidth,
@@ -26,11 +28,14 @@ export const BrandingControls = ({
   const logoInputRef = useRef(null);
   const twibbonInputRef = useRef(null);
 
+  const hasTwibbon = Boolean(twibbonSrc && twibbonSrc.trim());
+  const hasLogo = Boolean(logoSrc && logoSrc.trim());
+
   return (
     <div className="control-card">
       <div className="card-title">
         <Layers size={16} />
-        <span>Branding & Logo Size / Position</span>
+        <span>Branding & Overlays (Twibbon & Logo)</span>
       </div>
 
       <input
@@ -54,44 +59,67 @@ export const BrandingControls = ({
       />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {/* Twibbon Control */}
+        {/* 1. Twibbon Frame Control Card */}
         <div style={{
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
+          gap: '8px',
           background: 'var(--bg-input)',
-          padding: '10px 12px',
+          padding: '12px',
           borderRadius: '8px',
           border: '1px solid var(--border-color)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <input
-              type="checkbox"
-              id="twibbon-toggle"
-              checked={twibbonEnabled}
-              onChange={(e) => onToggleTwibbon(e.target.checked)}
-              style={{ width: '16px', height: '16px', accentColor: '#6366f1', cursor: 'pointer' }}
-            />
-            <div>
-              <label htmlFor="twibbon-toggle" style={{ margin: 0, cursor: 'pointer', fontSize: '13px' }}>
-                9:16 Twibbon / Frame
-              </label>
-              <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>
-                1080×1920 overlay PNG (Above Video)
-              </span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input
+                type="checkbox"
+                id="twibbon-toggle"
+                checked={twibbonEnabled && hasTwibbon}
+                onChange={(e) => onToggleTwibbon(e.target.checked)}
+                style={{ width: '16px', height: '16px', accentColor: '#6366f1', cursor: 'pointer' }}
+                disabled={!hasTwibbon}
+              />
+              <div>
+                <label htmlFor="twibbon-toggle" style={{ margin: 0, cursor: hasTwibbon ? 'pointer' : 'default', fontSize: '13px', fontWeight: 700 }}>
+                  9:16 Twibbon / Frame
+                </label>
+                <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>
+                  {hasTwibbon ? (twibbonEnabled ? '🟢 Aktif (Menempel di atas video)' : '⚪ Dimatikan / Disembunyikan') : '❌ Belum ada twibbon'}
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ padding: '5px 8px', fontSize: '11px' }}
+                onClick={() => twibbonInputRef.current?.click()}
+                title="Ganti / Upload Twibbon Baru"
+              >
+                <UploadCloud size={12} /> {hasTwibbon ? 'Ganti' : 'Upload'}
+              </button>
+
+              {hasTwibbon && onRemoveTwibbon && (
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ padding: '5px 8px', fontSize: '11px', color: '#f87171' }}
+                  onClick={() => {
+                    if (window.confirm('Hapus twibbon dari video ini?')) {
+                      onRemoveTwibbon();
+                    }
+                  }}
+                  title="Hapus / Kosongkan Twibbon"
+                >
+                  <Trash2 size={12} /> Hapus
+                </button>
+              )}
             </div>
           </div>
-          <button
-            type="button"
-            className="btn-secondary"
-            style={{ padding: '4px 8px', fontSize: '11px' }}
-            onClick={() => twibbonInputRef.current?.click()}
-          >
-            <UploadCloud size={12} /> Replace
-          </button>
         </div>
 
-        {/* Logo Main Box */}
+        {/* 2. Logo Control Card */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -106,30 +134,51 @@ export const BrandingControls = ({
               <input
                 type="checkbox"
                 id="logo-toggle"
-                checked={logoEnabled}
+                checked={logoEnabled && hasLogo}
                 onChange={(e) => onToggleLogo(e.target.checked)}
                 style={{ width: '16px', height: '16px', accentColor: '#6366f1', cursor: 'pointer' }}
+                disabled={!hasLogo}
               />
               <div>
-                <label htmlFor="logo-toggle" style={{ margin: 0, cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>
+                <label htmlFor="logo-toggle" style={{ margin: 0, cursor: hasLogo ? 'pointer' : 'default', fontSize: '13px', fontWeight: 700 }}>
                   Brand Logo
                 </label>
                 <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>
-                  Badge placed above caption
+                  {hasLogo ? (logoEnabled ? '🟢 Aktif (Badge di atas caption)' : '⚪ Dimatikan / Disembunyikan') : '❌ Belum ada logo'}
                 </span>
               </div>
             </div>
-            <button
-              type="button"
-              className="btn-secondary"
-              style={{ padding: '4px 8px', fontSize: '11px' }}
-              onClick={() => logoInputRef.current?.click()}
-            >
-              <UploadCloud size={12} /> Replace Logo
-            </button>
+
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ padding: '5px 8px', fontSize: '11px' }}
+                onClick={() => logoInputRef.current?.click()}
+                title="Ganti / Upload Logo Baru"
+              >
+                <UploadCloud size={12} /> {hasLogo ? 'Ganti' : 'Upload'}
+              </button>
+
+              {hasLogo && onRemoveLogo && (
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ padding: '5px 8px', fontSize: '11px', color: '#f87171' }}
+                  onClick={() => {
+                    if (window.confirm('Hapus logo dari video ini?')) {
+                      onRemoveLogo();
+                    }
+                  }}
+                  title="Hapus / Kosongkan Logo"
+                >
+                  <Trash2 size={12} /> Hapus
+                </button>
+              )}
+            </div>
           </div>
 
-          {logoEnabled && (
+          {hasLogo && logoEnabled && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
               {/* Logo Size / Scale Slider */}
               <div>

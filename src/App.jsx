@@ -731,9 +731,17 @@ export function App() {
                 twibbonEnabled={twibbonEnabled}
                 onToggleTwibbon={setTwibbonEnabled}
                 twibbonSrc={twibbonSrc}
+                onRemoveTwibbon={() => {
+                  setTwibbonSrc('');
+                  setTwibbonEnabled(false);
+                }}
                 logoEnabled={logoEnabled}
                 onToggleLogo={setLogoEnabled}
                 logoSrc={logoSrc}
+                onRemoveLogo={() => {
+                  setLogoSrc('');
+                  setLogoEnabled(false);
+                }}
                 onUploadAsset={handleUploadAsset}
                 logoWidth={logoWidth}
                 onChangeLogoWidth={setLogoWidth}

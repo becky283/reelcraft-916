@@ -440,8 +440,8 @@ app.post('/api/render', async (req, res) => {
         logoY = 980,
         logoWidth = 240,
         logoX,
-        logoSrc = '/assets/logo.png',
-        twibbonSrc = '/assets/twibbon.png',
+        logoSrc,
+        twibbonSrc,
         logoEnabled = true,
         twibbonEnabled = true,
         textStroke = 'none',
@@ -462,8 +462,8 @@ app.post('/api/render', async (req, res) => {
       };
 
       const resolvedVideoUrl = toHttpUrl(videoSrc);
-      const resolvedLogoUrl = toHttpUrl(logoSrc);
-      const resolvedTwibbonUrl = toHttpUrl(twibbonSrc);
+      const resolvedLogoUrl = logoEnabled && logoSrc ? toHttpUrl(logoSrc) : '';
+      const resolvedTwibbonUrl = twibbonEnabled && twibbonSrc ? toHttpUrl(twibbonSrc) : '';
 
       // Determine duration from video file
       let durationInFrames = 120;
