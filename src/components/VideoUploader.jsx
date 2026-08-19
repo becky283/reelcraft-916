@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Upload, Video, CheckCircle2, Music, AlertCircle, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { Upload, Video, CheckCircle2, Music, Sparkles, Volume2, VolumeX } from 'lucide-react';
 
 export const VideoUploader = ({
   videoSrc,
@@ -52,7 +52,7 @@ export const VideoUploader = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Video size={16} />
+        <Video size={15} />
         <span>Video Source</span>
       </div>
 
@@ -74,23 +74,25 @@ export const VideoUploader = ({
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
+            width: '38px',
+            height: '38px',
             borderRadius: '50%',
-            background: 'rgba(99, 102, 241, 0.15)',
+            background: 'rgba(99, 102, 241, 0.12)',
+            border: '1px solid rgba(99, 102, 241, 0.25)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#818cf8'
+            color: '#a5b4fc',
+            boxShadow: '0 2px 10px rgba(99, 102, 241, 0.2)'
           }}>
-            <Upload size={20} />
+            <Upload size={18} />
           </div>
           <div>
-            <span style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>
-              {isUploading ? 'Uploading & Analyzing...' : 'Choose Video from Computer'}
+            <span style={{ fontSize: '13.5px', fontWeight: 600, color: '#f8fafc' }}>
+              {isUploading ? 'Uploading & Analyzing...' : 'Pilih Video dari Komputer'}
             </span>
-            <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '2px' }}>
-              Drag and drop MP4, MOV, or WEBM
+            <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              Drag and drop MP4, MOV, atau WEBM
             </p>
           </div>
         </div>
@@ -99,19 +101,20 @@ export const VideoUploader = ({
       {/* Selected Video Metadata & Audio Controls */}
       {videoMeta && (
         <div style={{
-          background: 'rgba(31, 36, 45, 0.6)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '8px',
+          background: 'rgba(255, 255, 255, 0.025)',
+          border: '1px solid var(--glass-border)',
+          borderRadius: 'var(--radius-md)',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px'
+          gap: '10px',
+          boxShadow: 'var(--glass-specular-subtle)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{
-              fontSize: '13px',
-              fontWeight: 700,
-              color: '#fff',
+              fontSize: '12.5px',
+              fontWeight: 600,
+              color: '#f8fafc',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -120,7 +123,7 @@ export const VideoUploader = ({
               {videoMeta.originalName || videoMeta.filename || 'Input Video'}
             </span>
             <span className="badge badge-success">
-              <CheckCircle2 size={12} /> Ready
+              <CheckCircle2 size={11} /> Ready
             </span>
           </div>
 
@@ -137,53 +140,51 @@ export const VideoUploader = ({
             {videoMeta.hasAudio && (
               <span className="badge" style={{ color: muted ? '#f87171' : '#34d399', borderColor: muted ? 'rgba(248, 113, 113, 0.3)' : 'rgba(52, 211, 153, 0.3)' }}>
                 {muted ? <VolumeX size={11} /> : <Music size={11} />}
-                {muted ? 'Audio Muted' : 'Audio (AAC)'}
+                {muted ? 'Muted' : 'Audio AAC'}
               </span>
             )}
           </div>
 
           {/* Audio Sound Toggle & Volume Bar */}
           <div style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            paddingTop: '10px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            paddingTop: '9px',
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => onChangeMuted && onChangeMuted(!muted)}
-                  style={{
-                    background: muted ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                    border: muted ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(16, 185, 129, 0.4)',
-                    color: muted ? '#f87171' : '#34d399',
-                    padding: '5px 10px',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-                  <span>{muted ? 'Audio Video: DIMATIKAN (Muted)' : 'Audio Video: AKTIF (Bersuara)'}</span>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => onChangeMuted && onChangeMuted(!muted)}
+                style={{
+                  background: muted ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+                  border: muted ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid rgba(16, 185, 129, 0.35)',
+                  color: muted ? '#f87171' : '#34d399',
+                  padding: '4px 9px',
+                  borderRadius: '6px',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                <span>{muted ? 'Audio: DIMATIKAN (Hening)' : 'Audio: AKTIF'}</span>
+              </button>
 
-              <span style={{ fontSize: '11px', color: muted ? '#f87171' : '#9ca3af' }}>
-                {muted ? 'Hening / Tanpa Suara' : `${Math.round((volume ?? 1) * 100)}% Volume`}
+              <span style={{ fontSize: '11px', color: muted ? '#f87171' : 'var(--text-dim)' }}>
+                {muted ? 'Tanpa Suara' : `${Math.round((volume ?? 1) * 100)}% Volume`}
               </span>
             </div>
 
             {/* Optional Volume Slider if not muted */}
             {!muted && onChangeVolume && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                <span style={{ fontSize: '11px', color: '#9ca3af' }}>Vol:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>Vol:</span>
                 <input
                   type="range"
                   min="0"
@@ -191,7 +192,7 @@ export const VideoUploader = ({
                   step="0.05"
                   value={volume ?? 1}
                   onChange={(e) => onChangeVolume(Number(e.target.value))}
-                  style={{ flex: 1, accentColor: '#6366f1' }}
+                  style={{ flex: 1 }}
                 />
               </div>
             )}
@@ -202,30 +203,25 @@ export const VideoUploader = ({
       {/* Quick Test Samples */}
       {samples.length > 0 && (
         <div>
-          <label style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '6px' }}>
-            Or try quick built-in test video:
+          <label style={{ fontSize: '11.5px', color: 'var(--text-dim)', marginBottom: '5px' }}>
+            Video Contoh:
           </label>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             {samples.map((s, idx) => (
               <button
                 key={idx}
                 type="button"
+                className="btn-secondary"
                 onClick={() => onSelectSample(s)}
                 style={{
-                  background: videoSrc === s.url ? '#374151' : 'var(--bg-input)',
-                  border: videoSrc === s.url ? '1px solid #818cf8' : '1px solid var(--border-color)',
-                  color: videoSrc === s.url ? '#fff' : '#d1d5db',
-                  padding: '5px 10px',
-                  borderRadius: '6px',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px'
+                  background: videoSrc === s.url ? 'rgba(99, 102, 241, 0.18)' : undefined,
+                  borderColor: videoSrc === s.url ? 'rgba(99, 102, 241, 0.5)' : undefined,
+                  color: videoSrc === s.url ? '#fff' : undefined,
+                  padding: '4px 8px',
+                  fontSize: '11px',
                 }}
               >
-                <Sparkles size={12} />
+                <Sparkles size={11} />
                 {s.filename.replace('sample-', '').replace('.mp4', '')}
               </button>
             ))}

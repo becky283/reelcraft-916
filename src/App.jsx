@@ -754,21 +754,21 @@ export function App() {
           {/* Quick Helper in Simple Mode */}
           {isSimpleMode && (
             <div style={{
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px dashed var(--border-color)',
-              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px dashed var(--glass-border)',
+              borderRadius: 'var(--radius-md)',
               padding: '10px 14px',
               fontSize: '12px',
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
-              <span>Ingin ubah posisi video/logo/warna template?</span>
+              <span>Atur posisi video, logo, atau warna?</span>
               <button
                 type="button"
                 className="btn-secondary"
-                style={{ padding: '4px 8px', fontSize: '11px' }}
+                style={{ padding: '4px 9px', fontSize: '11px' }}
                 onClick={() => setIsSimpleMode(false)}
               >
                 <Sliders size={12} /> Buka Customizer
@@ -777,14 +777,14 @@ export function App() {
           )}
 
           {/* Big Generate Action Button */}
-          <div style={{ marginTop: 'auto', paddingTop: '10px' }}>
+          <div style={{ marginTop: 'auto', paddingTop: '8px' }}>
             <button
               className="btn-primary"
-              style={{ width: '100%', padding: '16px 24px', fontSize: '16px' }}
+              style={{ width: '100%', padding: '15px 24px', fontSize: '15px' }}
               onClick={handleGenerateVideo}
               disabled={isUploading || !videoSrc}
             >
-              <Sparkles size={20} />
+              <Sparkles size={18} />
               <span>Generate 1080×1920 MP4</span>
             </button>
           </div>

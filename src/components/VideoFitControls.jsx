@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crop, MoveVertical, Maximize2, Minimize2, Sliders, Smartphone, LayoutTemplate, RotateCcw } from 'lucide-react';
+import { Crop, MoveVertical, Maximize2, Minimize2, Smartphone, LayoutTemplate } from 'lucide-react';
 
 export const VideoFitControls = ({
   fit,
@@ -13,7 +13,6 @@ export const VideoFitControls = ({
   videoScale,
   onChangeVideoScale,
 }) => {
-  // Preset Layout Handlers
   const applyPreset = (preset) => {
     switch (preset) {
       case 'fullscreen':
@@ -52,68 +51,72 @@ export const VideoFitControls = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Crop size={16} />
+        <Crop size={15} />
         <span>Video Framing & Position</span>
       </div>
 
       {/* Quick Layout Presets */}
       <div>
-        <label>Quick Layout Presets</label>
+        <label>Preset Posisi Cepat</label>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           <button
             type="button"
             className="btn-secondary"
             style={{
-              padding: '8px 10px',
-              fontSize: '12px',
-              fontWeight: 700,
-              background: videoY === 0 && videoHeight === 1920 ? '#374151' : 'var(--bg-input)',
-              borderColor: videoY === 0 && videoHeight === 1920 ? '#818cf8' : 'var(--border-color)',
+              padding: '7px 10px',
+              fontSize: '11.5px',
+              fontWeight: 600,
+              background: videoY === 0 && videoHeight === 1920 ? 'rgba(99, 102, 241, 0.2)' : undefined,
+              borderColor: videoY === 0 && videoHeight === 1920 ? 'rgba(99, 102, 241, 0.4)' : undefined,
+              color: videoY === 0 && videoHeight === 1920 ? '#fff' : undefined,
             }}
             onClick={() => applyPreset('fullscreen')}
           >
-            <Smartphone size={14} /> Full 9:16 Screen
+            <Smartphone size={13} /> Full 9:16 Screen
           </button>
 
           <button
             type="button"
             className="btn-secondary"
             style={{
-              padding: '8px 10px',
-              fontSize: '12px',
-              fontWeight: 700,
-              background: videoY === 0 && videoHeight === 960 ? '#374151' : 'var(--bg-input)',
-              borderColor: videoY === 0 && videoHeight === 960 ? '#818cf8' : 'var(--border-color)',
+              padding: '7px 10px',
+              fontSize: '11.5px',
+              fontWeight: 600,
+              background: videoY === 0 && videoHeight === 960 ? 'rgba(99, 102, 241, 0.2)' : undefined,
+              borderColor: videoY === 0 && videoHeight === 960 ? 'rgba(99, 102, 241, 0.4)' : undefined,
+              color: videoY === 0 && videoHeight === 960 ? '#fff' : undefined,
             }}
             onClick={() => applyPreset('top')}
           >
-            <LayoutTemplate size={14} /> Top Half
+            <LayoutTemplate size={13} /> Top Half
           </button>
 
           <button
             type="button"
             className="btn-secondary"
             style={{
-              padding: '8px 10px',
-              fontSize: '12px',
-              fontWeight: 700,
-              background: videoY === 120 && videoHeight === 860 ? '#374151' : 'var(--bg-input)',
-              borderColor: videoY === 120 && videoHeight === 860 ? '#818cf8' : 'var(--border-color)',
+              padding: '7px 10px',
+              fontSize: '11.5px',
+              fontWeight: 600,
+              background: videoY === 120 && videoHeight === 860 ? 'rgba(99, 102, 241, 0.2)' : undefined,
+              borderColor: videoY === 120 && videoHeight === 860 ? 'rgba(99, 102, 241, 0.4)' : undefined,
+              color: videoY === 120 && videoHeight === 860 ? '#fff' : undefined,
             }}
             onClick={() => applyPreset('upper')}
           >
-            Upper Box (Header)
+            Upper Header Box
           </button>
 
           <button
             type="button"
             className="btn-secondary"
             style={{
-              padding: '8px 10px',
-              fontSize: '12px',
-              fontWeight: 700,
-              background: videoY === 300 && videoHeight === 750 ? '#374151' : 'var(--bg-input)',
-              borderColor: videoY === 300 && videoHeight === 750 ? '#818cf8' : 'var(--border-color)',
+              padding: '7px 10px',
+              fontSize: '11.5px',
+              fontWeight: 600,
+              background: videoY === 300 && videoHeight === 750 ? 'rgba(99, 102, 241, 0.2)' : undefined,
+              borderColor: videoY === 300 && videoHeight === 750 ? 'rgba(99, 102, 241, 0.4)' : undefined,
+              color: videoY === 300 && videoHeight === 750 ? '#fff' : undefined,
             }}
             onClick={() => applyPreset('center')}
           >
@@ -124,12 +127,12 @@ export const VideoFitControls = ({
 
       {/* Interactive Y-Position Slider */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
           <label style={{ margin: 0 }}>
-            <MoveVertical size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
-            Video Y Position (Vertical Offset)
+            <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+            Posisi Vertikal Video (Y)
           </label>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
             {videoY}px
           </span>
         </div>
@@ -141,7 +144,7 @@ export const VideoFitControls = ({
             step="10"
             value={videoY}
             onChange={(e) => onChangeVideoY(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#6366f1' }}
+            style={{ flex: 1 }}
           />
           <button
             type="button"
@@ -149,7 +152,7 @@ export const VideoFitControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               fontSize: '11px',
               cursor: 'pointer',
               textDecoration: 'underline'
@@ -162,10 +165,10 @@ export const VideoFitControls = ({
 
       {/* Video Slot Height Slider */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-          <label style={{ margin: 0 }}>Video Frame Height</label>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
-            {videoHeight}px {videoHeight === 1920 ? '(Full Height)' : ''}
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+          <label style={{ margin: 0 }}>Tinggi Slot Video</label>
+          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
+            {videoHeight}px {videoHeight === 1920 ? '(Full Screen)' : ''}
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -176,7 +179,7 @@ export const VideoFitControls = ({
             step="20"
             value={videoHeight}
             onChange={(e) => onChangeVideoHeight(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#6366f1' }}
+            style={{ flex: 1 }}
           />
           <button
             type="button"
@@ -184,7 +187,7 @@ export const VideoFitControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               fontSize: '11px',
               cursor: 'pointer',
               textDecoration: 'underline'
@@ -197,9 +200,9 @@ export const VideoFitControls = ({
 
       {/* Zoom / Scale Slider */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
           <label style={{ margin: 0 }}>Zoom / Scale</label>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
             {Math.round((videoScale || 1.0) * 100)}%
           </span>
         </div>
@@ -211,7 +214,7 @@ export const VideoFitControls = ({
             step="0.05"
             value={videoScale || 1.0}
             onChange={(e) => onChangeVideoScale(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#6366f1' }}
+            style={{ flex: 1 }}
           />
           <button
             type="button"
@@ -219,7 +222,7 @@ export const VideoFitControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               fontSize: '11px',
               cursor: 'pointer',
               textDecoration: 'underline'
@@ -239,7 +242,7 @@ export const VideoFitControls = ({
             className={`segment-btn ${fit === 'cover' ? 'active' : ''}`}
             onClick={() => onChangeFit('cover')}
           >
-            <Maximize2 size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+            <Maximize2 size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
             Crop to Fill (Cover)
           </button>
           <button
@@ -247,7 +250,7 @@ export const VideoFitControls = ({
             className={`segment-btn ${fit === 'contain' ? 'active' : ''}`}
             onClick={() => onChangeFit('contain')}
           >
-            <Minimize2 size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+            <Minimize2 size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
             Fit in Slot (Contain)
           </button>
         </div>

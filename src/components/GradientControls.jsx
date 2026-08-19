@@ -1,5 +1,5 @@
 import React from 'react';
-import { SunMedium, Sparkles, Droplet, Eye, Blend } from 'lucide-react';
+import { SunMedium, Sparkles } from 'lucide-react';
 
 const GRADIENT_COLOR_PRESETS = [
   { name: 'Pure Black', color: '#000000' },
@@ -13,7 +13,7 @@ const GRADIENT_COLOR_PRESETS = [
 const BOTTOM_HEIGHT_PRESETS = [
   { label: 'Subtle', height: 350 },
   { label: 'Medium', height: 550 },
-  { label: 'High (Optimal)', height: 700 },
+  { label: 'High', height: 700 },
   { label: 'Extra High', height: 950 },
 ];
 
@@ -32,8 +32,8 @@ export const GradientControls = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <SunMedium size={16} />
-        <span>Gradient Fades & Blankspace Fill</span>
+        <SunMedium size={15} />
+        <span>Gradient Fades & Blankspace</span>
       </div>
 
       {/* Blurred Video Backdrop Toggle */}
@@ -41,10 +41,11 @@ export const GradientControls = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: 'rgba(99, 102, 241, 0.08)',
+        background: 'rgba(255, 255, 255, 0.025)',
         padding: '10px 12px',
-        borderRadius: '8px',
-        border: '1px solid rgba(99, 102, 241, 0.25)',
+        borderRadius: 'var(--radius-md)',
+        border: '1px solid var(--glass-border)',
+        boxShadow: 'var(--glass-specular-subtle)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <input
@@ -52,14 +53,14 @@ export const GradientControls = ({
             id="backdrop-toggle"
             checked={backdropBlur}
             onChange={(e) => onChangeBackdropBlur(e.target.checked)}
-            style={{ width: '16px', height: '16px', accentColor: '#6366f1', cursor: 'pointer' }}
+            style={{ width: '15px', height: '15px', accentColor: '#6366f1', cursor: 'pointer' }}
           />
           <div>
-            <label htmlFor="backdrop-toggle" style={{ margin: 0, cursor: 'pointer', fontSize: '13px', fontWeight: 700, color: '#c7d2fe' }}>
-              Auto Blurred Video Background
+            <label htmlFor="backdrop-toggle" style={{ margin: 0, cursor: 'pointer', fontSize: '12.5px', fontWeight: 600 }}>
+              Auto Blurred Mirror Background
             </label>
-            <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>
-              Eliminates empty blank space with a cinematic blurred mirror backdrop
+            <span style={{ fontSize: '11px', color: 'var(--text-dim)', display: 'block' }}>
+              Menghilangkan blank space kosong di atas/bawah
             </span>
           </div>
         </div>
@@ -67,11 +68,11 @@ export const GradientControls = ({
 
       {/* Bottom Gradient Fade Height (Primary) */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-          <label style={{ margin: 0, fontWeight: 700, color: '#e0e7ff' }}>
-            Bottom Gradient Fade Height (Naik/Turun)
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+          <label style={{ margin: 0, fontWeight: 600 }}>
+            Bottom Gradient Height (Naik/Turun)
           </label>
-          <span style={{ fontSize: '12px', fontWeight: 800, color: '#818cf8' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
             {bottomGradientHeight}px
           </span>
         </div>
@@ -83,7 +84,7 @@ export const GradientControls = ({
             step="10"
             value={bottomGradientHeight}
             onChange={(e) => onChangeBottomGradientHeight(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#6366f1' }}
+            style={{ flex: 1 }}
           />
           <button
             type="button"
@@ -91,7 +92,7 @@ export const GradientControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               fontSize: '11px',
               cursor: 'pointer',
               textDecoration: 'underline'
@@ -109,11 +110,11 @@ export const GradientControls = ({
               type="button"
               onClick={() => onChangeBottomGradientHeight(p.height)}
               style={{
-                background: bottomGradientHeight === p.height ? '#374151' : 'rgba(255,255,255,0.05)',
-                border: bottomGradientHeight === p.height ? '1px solid #818cf8' : '1px solid var(--border-color)',
-                color: bottomGradientHeight === p.height ? '#fff' : '#9ca3af',
-                padding: '3px 8px',
-                borderRadius: '4px',
+                background: bottomGradientHeight === p.height ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255,255,255,0.03)',
+                border: bottomGradientHeight === p.height ? '1px solid rgba(99, 102, 241, 0.4)' : '1px solid var(--glass-border)',
+                color: bottomGradientHeight === p.height ? '#fff' : 'var(--text-muted)',
+                padding: '2px 7px',
+                borderRadius: '5px',
                 fontSize: '11px',
                 cursor: 'pointer',
               }}
@@ -126,9 +127,9 @@ export const GradientControls = ({
 
       {/* Top Gradient Fade Height */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-          <label style={{ margin: 0 }}>Top Gradient Fade Height</label>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+          <label style={{ margin: 0 }}>Top Gradient Height</label>
+          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
             {topGradientHeight}px
           </span>
         </div>
@@ -140,7 +141,7 @@ export const GradientControls = ({
             step="10"
             value={topGradientHeight}
             onChange={(e) => onChangeTopGradientHeight(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#6366f1' }}
+            style={{ flex: 1 }}
           />
           <button
             type="button"
@@ -148,7 +149,7 @@ export const GradientControls = ({
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               fontSize: '11px',
               cursor: 'pointer',
               textDecoration: 'underline'
@@ -160,10 +161,10 @@ export const GradientControls = ({
       </div>
 
       {/* Gradient Color & Opacity */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         {/* Color */}
         <div>
-          <label>Gradient Color</label>
+          <label>Warna Gradasi</label>
           <div className="color-picker-row">
             <div className="color-input-wrapper" style={{ backgroundColor: gradientColor }}>
               <input
@@ -188,9 +189,9 @@ export const GradientControls = ({
 
         {/* Opacity */}
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-            <label style={{ margin: 0 }}>Fade Intensity</label>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+            <label style={{ margin: 0 }}>Intensitas</label>
+            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
               {Math.round((gradientOpacity ?? 1) * 100)}%
             </span>
           </div>
@@ -201,7 +202,7 @@ export const GradientControls = ({
             step="0.05"
             value={gradientOpacity ?? 1}
             onChange={(e) => onChangeGradientOpacity(Number(e.target.value))}
-            style={{ width: '100%', accentColor: '#6366f1' }}
+            style={{ width: '100%' }}
           />
         </div>
       </div>

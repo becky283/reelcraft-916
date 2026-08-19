@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Layers, Image, UploadCloud, MoveVertical, Maximize2, Trash2, CheckCircle2, XCircle } from 'lucide-react';
+import { Layers, Image, UploadCloud, MoveVertical, Maximize2, Trash2, CheckCircle2 } from 'lucide-react';
 
 const LOGO_SIZE_PRESETS = [
   { label: 'Small', width: 140 },
@@ -34,8 +34,8 @@ export const BrandingControls = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Layers size={16} />
-        <span>Branding & Overlays (Twibbon & Logo)</span>
+        <Layers size={15} />
+        <span>Branding Overlays</span>
       </div>
 
       <input
@@ -58,16 +58,17 @@ export const BrandingControls = ({
         style={{ display: 'none' }}
       />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {/* 1. Twibbon Frame Control Card */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '8px',
-          background: 'var(--bg-input)',
+          background: 'rgba(255, 255, 255, 0.025)',
           padding: '12px',
-          borderRadius: '8px',
-          border: '1px solid var(--border-color)',
+          borderRadius: 'var(--radius-md)',
+          border: '1px solid var(--glass-border)',
+          boxShadow: 'var(--glass-specular-subtle)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -76,15 +77,15 @@ export const BrandingControls = ({
                 id="twibbon-toggle"
                 checked={twibbonEnabled && hasTwibbon}
                 onChange={(e) => onToggleTwibbon(e.target.checked)}
-                style={{ width: '16px', height: '16px', accentColor: '#6366f1', cursor: 'pointer' }}
+                style={{ width: '15px', height: '15px', accentColor: '#6366f1', cursor: 'pointer' }}
                 disabled={!hasTwibbon}
               />
               <div>
-                <label htmlFor="twibbon-toggle" style={{ margin: 0, cursor: hasTwibbon ? 'pointer' : 'default', fontSize: '13px', fontWeight: 700 }}>
+                <label htmlFor="twibbon-toggle" style={{ margin: 0, cursor: hasTwibbon ? 'pointer' : 'default', fontSize: '12.5px', fontWeight: 600 }}>
                   9:16 Twibbon / Frame
                 </label>
-                <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>
-                  {hasTwibbon ? (twibbonEnabled ? '🟢 Aktif (Menempel di atas video)' : '⚪ Dimatikan / Disembunyikan') : '❌ Belum ada twibbon'}
+                <span style={{ fontSize: '11px', color: 'var(--text-dim)', display: 'block' }}>
+                  {hasTwibbon ? (twibbonEnabled ? '🟢 Aktif' : '⚪ Disembunyikan') : '❌ Belum ada file'}
                 </span>
               </div>
             </div>
@@ -93,7 +94,7 @@ export const BrandingControls = ({
               <button
                 type="button"
                 className="btn-secondary"
-                style={{ padding: '5px 8px', fontSize: '11px' }}
+                style={{ padding: '4px 8px', fontSize: '11px' }}
                 onClick={() => twibbonInputRef.current?.click()}
                 title="Ganti / Upload Twibbon Baru"
               >
@@ -104,7 +105,7 @@ export const BrandingControls = ({
                 <button
                   type="button"
                   className="btn-secondary"
-                  style={{ padding: '5px 8px', fontSize: '11px', color: '#f87171' }}
+                  style={{ padding: '4px 8px', fontSize: '11px', color: '#f87171' }}
                   onClick={() => {
                     if (window.confirm('Hapus twibbon dari video ini?')) {
                       onRemoveTwibbon();
@@ -124,10 +125,11 @@ export const BrandingControls = ({
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
-          background: 'var(--bg-input)',
+          background: 'rgba(255, 255, 255, 0.025)',
           padding: '12px',
-          borderRadius: '8px',
-          border: '1px solid var(--border-color)',
+          borderRadius: 'var(--radius-md)',
+          border: '1px solid var(--glass-border)',
+          boxShadow: 'var(--glass-specular-subtle)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -136,15 +138,15 @@ export const BrandingControls = ({
                 id="logo-toggle"
                 checked={logoEnabled && hasLogo}
                 onChange={(e) => onToggleLogo(e.target.checked)}
-                style={{ width: '16px', height: '16px', accentColor: '#6366f1', cursor: 'pointer' }}
+                style={{ width: '15px', height: '15px', accentColor: '#6366f1', cursor: 'pointer' }}
                 disabled={!hasLogo}
               />
               <div>
-                <label htmlFor="logo-toggle" style={{ margin: 0, cursor: hasLogo ? 'pointer' : 'default', fontSize: '13px', fontWeight: 700 }}>
+                <label htmlFor="logo-toggle" style={{ margin: 0, cursor: hasLogo ? 'pointer' : 'default', fontSize: '12.5px', fontWeight: 600 }}>
                   Brand Logo
                 </label>
-                <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>
-                  {hasLogo ? (logoEnabled ? '🟢 Aktif (Badge di atas caption)' : '⚪ Dimatikan / Disembunyikan') : '❌ Belum ada logo'}
+                <span style={{ fontSize: '11px', color: 'var(--text-dim)', display: 'block' }}>
+                  {hasLogo ? (logoEnabled ? '🟢 Aktif' : '⚪ Disembunyikan') : '❌ Belum ada file'}
                 </span>
               </div>
             </div>
@@ -153,7 +155,7 @@ export const BrandingControls = ({
               <button
                 type="button"
                 className="btn-secondary"
-                style={{ padding: '5px 8px', fontSize: '11px' }}
+                style={{ padding: '4px 8px', fontSize: '11px' }}
                 onClick={() => logoInputRef.current?.click()}
                 title="Ganti / Upload Logo Baru"
               >
@@ -164,7 +166,7 @@ export const BrandingControls = ({
                 <button
                   type="button"
                   className="btn-secondary"
-                  style={{ padding: '5px 8px', fontSize: '11px', color: '#f87171' }}
+                  style={{ padding: '4px 8px', fontSize: '11px', color: '#f87171' }}
                   onClick={() => {
                     if (window.confirm('Hapus logo dari video ini?')) {
                       onRemoveLogo();
@@ -179,15 +181,15 @@ export const BrandingControls = ({
           </div>
 
           {hasLogo && logoEnabled && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '10px' }}>
               {/* Logo Size / Scale Slider */}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <label style={{ margin: 0, fontSize: '12px' }}>
+                  <label style={{ margin: 0, fontSize: '11.5px' }}>
                     <Maximize2 size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
-                    Logo Size (Width)
+                    Ukuran Logo (Width)
                   </label>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+                  <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
                     {logoWidth}px
                   </span>
                 </div>
@@ -199,7 +201,7 @@ export const BrandingControls = ({
                     step="10"
                     value={logoWidth}
                     onChange={(e) => onChangeLogoWidth(Number(e.target.value))}
-                    style={{ flex: 1, accentColor: '#6366f1' }}
+                    style={{ flex: 1 }}
                   />
                   <button
                     type="button"
@@ -207,7 +209,7 @@ export const BrandingControls = ({
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: '#9ca3af',
+                      color: 'var(--text-muted)',
                       fontSize: '11px',
                       cursor: 'pointer',
                       textDecoration: 'underline'
@@ -225,11 +227,11 @@ export const BrandingControls = ({
                       type="button"
                       onClick={() => onChangeLogoWidth(p.width)}
                       style={{
-                        background: logoWidth === p.width ? '#374151' : 'rgba(255,255,255,0.05)',
-                        border: logoWidth === p.width ? '1px solid #818cf8' : '1px solid var(--border-color)',
-                        color: logoWidth === p.width ? '#fff' : '#9ca3af',
-                        padding: '3px 8px',
-                        borderRadius: '4px',
+                        background: logoWidth === p.width ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255,255,255,0.03)',
+                        border: logoWidth === p.width ? '1px solid rgba(99, 102, 241, 0.4)' : '1px solid var(--glass-border)',
+                        color: logoWidth === p.width ? '#fff' : 'var(--text-muted)',
+                        padding: '2px 7px',
+                        borderRadius: '5px',
                         fontSize: '11px',
                         cursor: 'pointer',
                       }}
@@ -243,11 +245,11 @@ export const BrandingControls = ({
               {/* Logo Y Position Slider */}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <label style={{ margin: 0, fontSize: '12px' }}>
+                  <label style={{ margin: 0, fontSize: '11.5px' }}>
                     <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
-                    Logo Vertical Position (Y)
+                    Posisi Vertikal Logo (Y)
                   </label>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+                  <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
                     {logoY}px
                   </span>
                 </div>
@@ -259,7 +261,7 @@ export const BrandingControls = ({
                     step="10"
                     value={logoY}
                     onChange={(e) => onChangeLogoY(Number(e.target.value))}
-                    style={{ flex: 1, accentColor: '#6366f1' }}
+                    style={{ flex: 1 }}
                   />
                   <button
                     type="button"
@@ -267,7 +269,7 @@ export const BrandingControls = ({
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: '#9ca3af',
+                      color: 'var(--text-muted)',
                       fontSize: '11px',
                       cursor: 'pointer',
                       textDecoration: 'underline'

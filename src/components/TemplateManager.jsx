@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutTemplate, Bookmark, Save, Trash2, Check, Plus, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { Bookmark, Save, Trash2, Check, Plus, SlidersHorizontal, Sparkles } from 'lucide-react';
 
 export const TemplateManager = ({
   templates = [],
@@ -42,11 +42,11 @@ export const TemplateManager = ({
   const currentTemplate = templateList.find((t) => t.id === activeTemplateId) || templateList[0];
 
   return (
-    <div className="control-card" style={{ border: '1px solid rgba(99, 102, 241, 0.4)', background: 'linear-gradient(180deg, #181c24 0%, #15181e 100%)' }}>
+    <div className="control-card">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div className="card-title" style={{ color: '#818cf8', margin: 0 }}>
-          <Bookmark size={16} />
-          <span>Active Preset Template</span>
+        <div className="card-title" style={{ color: '#a5b4fc', margin: 0 }}>
+          <Bookmark size={15} />
+          <span>Preset Template</span>
         </div>
 
         {/* Simple Mode Toggle */}
@@ -54,22 +54,23 @@ export const TemplateManager = ({
           type="button"
           onClick={() => onToggleSimpleMode(!isSimpleMode)}
           style={{
-            background: isSimpleMode ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)',
-            border: isSimpleMode ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(99, 102, 241, 0.3)',
-            color: isSimpleMode ? '#34d399' : '#818cf8',
+            background: isSimpleMode ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
+            border: isSimpleMode ? '1px solid rgba(16, 185, 129, 0.35)' : '1px solid rgba(99, 102, 241, 0.3)',
+            color: isSimpleMode ? '#34d399' : '#a5b4fc',
             fontSize: '11px',
             fontWeight: 700,
-            padding: '3px 8px',
+            padding: '3px 9px',
             borderRadius: '6px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '5px',
+            transition: 'all 0.15s ease',
           }}
           title={isSimpleMode ? "Showing Simple Mode (Video + Caption only)" : "Showing All Customizer Controls"}
         >
           <SlidersHorizontal size={12} />
-          {isSimpleMode ? 'Simple Mode: ON' : 'Customize Mode'}
+          {isSimpleMode ? 'Simple Mode' : 'Customize Mode'}
         </button>
       </div>
 
@@ -78,11 +79,11 @@ export const TemplateManager = ({
         <select
           value={activeTemplateId || 'main-template'}
           onChange={(e) => onSelectTemplate(e.target.value)}
-          style={{ flex: 1, fontWeight: 700, borderColor: '#6366f1' }}
+          style={{ flex: 1, fontWeight: 600, borderColor: 'rgba(99, 102, 241, 0.4)' }}
         >
           {templateList.map((t) => (
             <option key={t.id} value={t.id}>
-              ★ {t.name || t.id}
+              {t.name || t.id}
             </option>
           ))}
         </select>
@@ -96,7 +97,7 @@ export const TemplateManager = ({
           title="Save current layout changes to this template"
         >
           {saveSuccess ? <Check size={14} style={{ color: '#34d399' }} /> : <Save size={14} />}
-          <span>{saveSuccess ? 'Saved!' : 'Save'}</span>
+          <span>{saveSuccess ? 'Saved' : 'Save'}</span>
         </button>
 
         {/* New Template Trigger */}
@@ -133,16 +134,16 @@ export const TemplateManager = ({
         <form onSubmit={handleSaveSubmit} style={{ display: 'flex', gap: '6px', marginTop: '2px' }}>
           <input
             type="text"
-            placeholder="New Template Name (e.g. Golfies Reels Style)"
+            placeholder="New Template Name (e.g. Clean Reels Style)"
             value={newTemplateName}
             onChange={(e) => setNewTemplateName(e.target.value)}
             autoFocus
-            style={{ fontSize: '12px', padding: '6px 10px' }}
+            style={{ fontSize: '12.5px', padding: '7px 10px' }}
           />
           <button
             type="submit"
             className="btn-primary"
-            style={{ padding: '6px 12px', fontSize: '12px', whiteSpace: 'nowrap' }}
+            style={{ padding: '7px 12px', fontSize: '12px', whiteSpace: 'nowrap' }}
           >
             Save Preset
           </button>
@@ -150,19 +151,19 @@ export const TemplateManager = ({
             type="button"
             className="btn-secondary"
             onClick={() => setIsSavingNew(false)}
-            style={{ padding: '6px 10px', fontSize: '12px' }}
+            style={{ padding: '7px 10px', fontSize: '12px' }}
           >
             Cancel
           </button>
         </form>
       )}
 
-      <div style={{ fontSize: '11px', color: '#9ca3af', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ fontSize: '11px', color: 'var(--text-dim)', display: 'flex', justifyContent: 'space-between' }}>
         <span>
           {isSimpleMode ? (
-            <span style={{ color: '#34d399' }}>✨ Simple Mode: Cukup pilih video & tulis caption. Format otomatis pas!</span>
+            <span style={{ color: '#34d399' }}>✨ Mode Cepat: Pilih video & ketik caption. Format otomatis pas.</span>
           ) : (
-            <span>Semua posisi, logo, twibbon, dan warna tersimpan otomatis di template.</span>
+            <span>Semua posisi, logo, twibbon, dan warna tersimpan rapi di template.</span>
           )}
         </span>
       </div>

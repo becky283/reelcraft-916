@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Type, Highlighter, Palette, Sparkles, MoveVertical, X, Check, MousePointerClick } from 'lucide-react';
+import { Type, Highlighter, Palette, Sparkles, MoveVertical, MousePointerClick } from 'lucide-react';
 import { parseHighlightedText } from '../remotion/CaptionLayer';
 
 const DEFAULT_COLOR_PRESETS = [
@@ -43,18 +43,15 @@ export const CaptionEditor = ({
   // Extract unique words from caption for click-to-highlight
   const availableWords = useMemo(() => {
     if (!displayText) return [];
-    // Match words and punctuation units
     return displayText.trim().split(/\s+/).filter(Boolean);
   }, [displayText]);
 
   // Check if a specific word from caption is currently highlighted
   const isWordHighlighted = (word) => {
     const cleanWord = word.trim().toLowerCase();
-    // Check in highlightWords array
     if (highlightWords.some(w => w.trim().toLowerCase() === cleanWord)) {
       return true;
     }
-    // Check in highlightText (comma-separated)
     if (highlightText) {
       const parts = highlightText.split(/[,;\n]+/).map(s => s.trim().toLowerCase());
       if (parts.includes(cleanWord)) return true;
@@ -70,7 +67,6 @@ export const CaptionEditor = ({
     let nextWords = [...highlightWords];
     if (exists) {
       nextWords = nextWords.filter(w => w.trim().toLowerCase() !== word.trim().toLowerCase());
-      // Also remove from highlightText if present
       if (highlightText) {
         const parts = highlightText.split(/[,;\n]+/).map(s => s.trim()).filter(s => s.toLowerCase() !== word.trim().toLowerCase());
         if (onChangeHighlightText) onChangeHighlightText(parts.join(', '));
@@ -107,26 +103,27 @@ export const CaptionEditor = ({
   return (
     <div className="control-card">
       <div className="card-title">
-        <Type size={16} />
-        <span>Caption & Multi-Word Highlighter</span>
+        <Type size={15} />
+        <span>Caption & Word Highlighter</span>
       </div>
 
       {/* 1. Caption Textarea */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-          <label style={{ margin: 0 }}>Caption / Headline</label>
+          <label style={{ margin: 0 }}>Caption / Headline Teks</label>
           <button
             type="button"
             onClick={() => onToggleUppercase(!uppercase)}
             style={{
-              background: uppercase ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
-              border: uppercase ? '1px solid #6366f1' : '1px solid var(--border-color)',
-              color: uppercase ? '#818cf8' : '#9ca3af',
-              fontSize: '11px',
+              background: uppercase ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+              border: uppercase ? '1px solid rgba(99, 102, 241, 0.35)' : '1px solid var(--glass-border)',
+              color: uppercase ? '#a5b4fc' : 'var(--text-muted)',
+              fontSize: '10.5px',
               fontWeight: 700,
-              padding: '2px 8px',
-              borderRadius: '4px',
+              padding: '2px 7px',
+              borderRadius: '5px',
               cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
             {uppercase ? 'UPPERCASE ON' : 'UPPERCASE OFF'}
@@ -140,30 +137,31 @@ export const CaptionEditor = ({
         />
       </div>
 
-      {/* 2. Interactive Word-Click Highlighter (Super Easy & Multiple Words!) */}
+      {/* 2. Interactive Word-Click Highlighter */}
       {availableWords.length > 0 && (
         <div style={{
-          background: 'rgba(99, 102, 241, 0.06)',
-          border: '1px solid rgba(99, 102, 241, 0.25)',
-          borderRadius: '10px',
+          background: 'rgba(99, 102, 241, 0.04)',
+          border: '1px solid rgba(99, 102, 241, 0.18)',
+          borderRadius: 'var(--radius-md)',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
           gap: '8px',
+          boxShadow: 'var(--glass-specular-subtle)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#c7d2fe', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <MousePointerClick size={14} style={{ color: '#818cf8' }} />
-              Klik Kata yang Mau Di-highlight (Kuning):
+            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#c7d2fe', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <MousePointerClick size={13} style={{ color: '#818cf8' }} />
+              Klik Kata untuk Highlight Warna:
             </span>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
               <button
                 type="button"
                 onClick={handleClearAll}
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#9ca3af',
+                  color: 'var(--text-muted)',
                   fontSize: '11px',
                   cursor: 'pointer',
                   textDecoration: 'underline'
@@ -189,7 +187,7 @@ export const CaptionEditor = ({
           </div>
 
           {/* Clickable Word Pills */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '2px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '2px' }}>
             {availableWords.map((word, idx) => {
               const active = isWordHighlighted(word);
               return (
@@ -198,17 +196,17 @@ export const CaptionEditor = ({
                   type="button"
                   onClick={() => handleToggleWord(word)}
                   style={{
-                    background: active ? highlightColor : 'var(--bg-input)',
-                    color: active ? '#000000' : '#d1d5db',
-                    border: active ? `1px solid ${highlightColor}` : '1px solid var(--border-color)',
-                    padding: '5px 10px',
+                    background: active ? highlightColor : 'rgba(255, 255, 255, 0.04)',
+                    color: active ? '#000000' : '#e2e8f0',
+                    border: active ? `1px solid ${highlightColor}` : '1px solid var(--glass-border)',
+                    padding: '4px 9px',
                     borderRadius: '6px',
-                    fontSize: '13px',
-                    fontWeight: 800,
+                    fontSize: '12px',
+                    fontWeight: 700,
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    boxShadow: active ? `0 2px 8px ${highlightColor}40` : 'none',
-                    transform: active ? 'scale(1.04)' : 'scale(1)',
+                    transition: 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: active ? `0 2px 10px ${highlightColor}50` : 'none',
+                    transform: active ? 'scale(1.03)' : 'scale(1)',
                   }}
                 >
                   {word}
@@ -217,17 +215,17 @@ export const CaptionEditor = ({
             })}
           </div>
 
-          <span style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>
-            💡 Tinggal klik kata mana saja yang ingin diberi warna highlight kuning (bisa acak / terpisah).
+          <span style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '2px' }}>
+            💡 Klik kata mana saja yang ingin di-highlight warna (bisa acak / terpisah).
           </span>
         </div>
       )}
 
       {/* 3. Optional Comma-Separated Highlight Input */}
       <div>
-        <label>
-          <Highlighter size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
-          Atau Ketik Kata/Frasa Highlight (pisahkan koma jika lebih dari 1)
+        <label style={{ fontSize: '11.5px', color: 'var(--text-dim)' }}>
+          <Highlighter size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+          Atau Ketik Kata Highlight (pisahkan koma)
         </label>
         <input
           type="text"
@@ -236,36 +234,37 @@ export const CaptionEditor = ({
             if (onChangeHighlightText) onChangeHighlightText(e.target.value);
           }}
           placeholder="e.g. JIM CRAMER, JUAL, TURUN"
+          style={{ fontSize: '12.5px' }}
         />
       </div>
 
       {/* 4. Live Highlighted Text Preview */}
       {caption && (
         <div style={{
-          background: 'rgba(0, 0, 0, 0.45)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '8px',
-          padding: '10px 12px',
-          fontSize: '14px',
-          fontWeight: 800,
+          background: 'rgba(0, 0, 0, 0.35)',
+          border: '1px solid var(--glass-border)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '9px 12px',
+          fontSize: '13px',
+          fontWeight: 700,
           display: 'flex',
           flexWrap: 'wrap',
           gap: '4px',
           alignItems: 'center',
           lineHeight: 1.4,
         }}>
-          <span style={{ fontSize: '11px', color: '#9ca3af', width: '100%', marginBottom: '4px' }}>
-            Hasil Preview Highlight Teks:
+          <span style={{ fontSize: '10.5px', color: 'var(--text-dim)', width: '100%', marginBottom: '2px' }}>
+            Preview Highlight:
           </span>
           {previewSegments.map((seg, idx) => (
             <span
               key={idx}
               style={{
                 color: seg.isHighlight ? highlightColor : defaultColor,
-                backgroundColor: seg.isHighlight ? `${highlightColor}25` : 'transparent',
-                padding: seg.isHighlight ? '2px 6px' : '0',
+                backgroundColor: seg.isHighlight ? `${highlightColor}20` : 'transparent',
+                padding: seg.isHighlight ? '1px 5px' : '0',
                 borderRadius: '4px',
-                border: seg.isHighlight ? `1px solid ${highlightColor}60` : 'none',
+                border: seg.isHighlight ? `1px solid ${highlightColor}50` : 'none',
               }}
             >
               {seg.text}
@@ -275,7 +274,7 @@ export const CaptionEditor = ({
       )}
 
       {/* 5. Color Controls */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         {/* Default Color */}
         <div>
           <label>Warna Teks Biasa</label>
@@ -330,12 +329,12 @@ export const CaptionEditor = ({
       {/* 6. Caption Y Position Slider (If customizer is enabled) */}
       {onChangeCaptionY && (
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
             <label style={{ margin: 0 }}>
-              <MoveVertical size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+              <MoveVertical size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
               Posisi Vertikal Caption (Y)
             </label>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#a5b4fc' }}>
               {captionY}px
             </span>
           </div>
@@ -347,7 +346,7 @@ export const CaptionEditor = ({
               step="10"
               value={captionY}
               onChange={(e) => onChangeCaptionY(Number(e.target.value))}
-              style={{ flex: 1, accentColor: '#6366f1' }}
+              style={{ flex: 1 }}
             />
             <button
               type="button"
@@ -355,7 +354,7 @@ export const CaptionEditor = ({
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#9ca3af',
+                color: 'var(--text-muted)',
                 fontSize: '11px',
                 cursor: 'pointer',
                 textDecoration: 'underline'

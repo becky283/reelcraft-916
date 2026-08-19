@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Player } from '@remotion/player';
 import { MainComposition } from '../remotion/Composition';
 import defaultTemplate from '../../templates/main-template.json';
-import { Play, Eye } from 'lucide-react';
+import { Eye, Radio } from 'lucide-react';
 
 export const Preview = ({
   videoSrc,
@@ -121,14 +121,16 @@ export const Preview = ({
       justifyContent: 'center',
       width: '100%',
       height: '100%',
-      gap: '12px'
+      gap: '14px',
+      position: 'relative',
+      zIndex: 10,
     }}>
       {/* Phone Mockup Frame */}
       <div
         className="phone-mockup"
         style={{
           width: '340px',
-          height: '604px', // 9:16 ratio (340 x 604.4)
+          height: '604px', // 9:16 ratio
           maxHeight: 'calc(100vh - 160px)',
           aspectRatio: '9 / 16',
         }}
@@ -152,15 +154,21 @@ export const Preview = ({
         />
       </div>
 
+      {/* Live Badge */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        fontSize: '12px',
-        color: '#9ca3af'
+        fontSize: '11.5px',
+        color: 'var(--text-muted)',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid var(--glass-border)',
+        padding: '4px 10px',
+        borderRadius: '999px',
+        boxShadow: 'var(--glass-specular-subtle)',
       }}>
-        <Eye size={13} />
-        <span>Live 9:16 Preview (1080 × 1920 canvas)</span>
+        <Radio size={12} style={{ color: '#10b981' }} />
+        <span>Live 9:16 Studio Canvas (1080 × 1920)</span>
       </div>
     </div>
   );
